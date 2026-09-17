@@ -1,0 +1,576 @@
+/* ============================================================
+   RESET / BASE
+   ============================================================ */
+* {
+  box-sizing: border-box;
+}s
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+}
+html {
+  background: var(--pm-page);
+  scroll-behavior: smooth;
+}
+body {
+  font-family:
+    Inter, "Inter var", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--pm-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img,
+svg {
+  max-width: 100%;
+}
+::selection {
+  background: var(--pm-primary-soft);
+}
+
+/* ============================================================
+   THEME TOKENS
+   Defaults below are the "Elevated light" theme. Switching themes
+   (see src/theme/palettes.js + applyPalette()) overwrites these same
+   variable names inline on <html>, so every rule that references them
+   updates instantly with no extra CSS needed per theme.
+   ============================================================ */
+:root {
+  --pm-primary: #5b5ce2;
+  --pm-primary-hover: #4748c9;
+  --pm-primary-soft: rgba(91, 92, 226, 0.1);
+  --pm-page: #f4f7fc;
+  --pm-page-glow-1: rgba(91, 92, 226, 0.1);
+  --pm-page-glow-2: rgba(139, 92, 246, 0.08);
+  --pm-page-glow-3: rgba(8, 145, 178, 0.045);
+  --pm-surface: rgba(255, 255, 255, 0.94);
+  --pm-surface-solid: #ffffff;
+  --pm-border: #e3e8f2;
+  --pm-border-hover: rgba(91, 92, 226, 0.22);
+  --pm-ink: #17213d;
+  --pm-text-secondary: #61708d;
+  --pm-table-head-bg: linear-gradient(180deg, #f4f6ff 0%, #eef2fa 100%);
+  --pm-btn-gradient: linear-gradient(
+    135deg,
+    #5b5ce2 0%,
+    #6d5de7 55%,
+    #8b5cf6 100%
+  );
+  --pm-btn-gradient-hover: linear-gradient(
+    135deg,
+    #4748c9 0%,
+    #5b5ce2 55%,
+    #7c3aed 100%
+  );
+  --pm-gradient-title: linear-gradient(
+    90deg,
+    #17213d 0%,
+    #4f50c9 58%,
+    #8b5cf6 100%
+  );
+  --pm-eyebrow: #5b5ce2;
+  --pm-radius-card: 16px;
+  --pm-font-heading: "Inter", "Inter var", sans-serif;
+  --pm-control-height: 40px;
+  --pm-control-radius: 10px;
+  --pm-success: #16a34a;
+  --pm-warning: #d97706;
+  --pm-danger: #dc2626;
+}
+
+/* Ambient page glow — subtle, theme-tinted radial washes behind content. */
+body {
+  background:
+    radial-gradient(circle at 0% 0%, var(--pm-page-glow-1), transparent 24%),
+    radial-gradient(circle at 100% 0%, var(--pm-page-glow-2), transparent 22%),
+    radial-gradient(circle at 80% 100%, var(--pm-page-glow-3), transparent 24%),
+    var(--pm-page);
+}
+
+/* ============================================================
+   LAYOUT / UTILITIES
+   ============================================================ */
+.app-page {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 4px 4px 40px;
+  position: relative;
+  animation: pm-fade-up 220ms ease-out both;
+}
+.app-page::after {
+  content: "";
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  right: -260px;
+  bottom: -260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--pm-page-glow-1), transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+.page-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 6px 2px 20px;
+  margin-bottom: 20px;
+}
+.page-header h1,
+.page-header h2,
+.page-header h3 {
+  margin: 0;
+  letter-spacing: -0.03em;
+  font-family: var(--pm-font-heading);
+}
+.page-subtitle {
+  margin-top: 6px;
+  color: var(--pm-text-secondary);
+  font-size: 14px;
+  line-height: 1.55;
+  max-width: 760px;
+}
+.section-card,
+.pm-surface {
+  background: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: var(--pm-radius-card);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.03),
+    0 10px 30px rgba(16, 24, 40, 0.05);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 220ms ease;
+}
+.section-card:hover,
+.pm-surface:hover {
+  border-color: var(--pm-border-hover);
+  box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+}
+.page-section {
+  margin-top: 24px;
+}
+.responsive-table,
+.pm-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.data-grid,
+.pm-table-scroll > table {
+  min-width: 720px;
+}
+.pm-muted {
+  color: var(--pm-text-secondary);
+}
+.pm-nowrap {
+  white-space: nowrap;
+}
+.pm-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pm-hover-lift {
+  transition:
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pm-hover-lift:hover {
+  transform: translateY(-2px);
+  border-color: var(--pm-border-hover);
+  box-shadow:
+    0 12px 28px rgba(15, 23, 42, 0.08),
+    0 2px 6px rgba(15, 23, 42, 0.04);
+}
+.pm-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pm-eyebrow);
+}
+.pm-gradient-title {
+  background: var(--pm-gradient-title);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.pm-page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.025);
+  backdrop-filter: blur(14px);
+}
+@media (max-width: 700px) {
+  .pm-page-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .section-card,
+  .pm-surface {
+    border-radius: 14px;
+  }
+}
+
+.pm-success {
+  color: var(--pm-success);
+  background: #ecfdf3;
+}
+.pm-info {
+  color: #0369a1;
+  background: #ecf8ff;
+}
+.pm-warning {
+  color: var(--pm-warning);
+  background: #fff7e6;
+}
+.pm-danger {
+  color: var(--pm-danger);
+  background: #fff1f2;
+}
+
+@keyframes pm-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.pm-fade-up {
+  animation: pm-fade-up 240ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+.pm-stagger > * {
+  animation: pm-fade-up 240ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+.pm-stagger > *:nth-child(2) {
+  animation-delay: 35ms;
+}
+.pm-stagger > *:nth-child(3) {
+  animation-delay: 70ms;
+}
+.pm-stagger > *:nth-child(4) {
+  animation-delay: 105ms;
+}
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 12px;
+  z-index: 2000;
+  background: var(--pm-ink);
+  color: var(--pm-surface-solid);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 650;
+  transition: top 160ms ease;
+}
+.skip-link:focus {
+  top: 12px;
+}
+@media (max-width: 900px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+@media (max-width: 600px) {
+  .app-page {
+    padding-inline: 0;
+  }
+  .page-header {
+    margin-bottom: 18px;
+    gap: 14px;
+  }
+  .page-subtitle {
+    font-size: 13px;
+  }
+  .page-section {
+    margin-top: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   MUI OVERRIDES — themed via the variables above
+   ============================================================ */
+.section-card,
+.pm-surface,
+.MuiCard-root {
+  background: var(--pm-surface) !important;
+  border: 1px solid var(--pm-border) !important;
+  border-radius: var(--pm-radius-card) !important;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.035),
+    0 14px 34px rgba(0, 0, 0, 0.065) !important;
+}
+.section-card:hover,
+.pm-surface:hover,
+.MuiCard-root:hover {
+  border-color: var(--pm-border-hover) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+.MuiPaper-root {
+  border-color: var(--pm-border);
+}
+.MuiCard-root .MuiTypography-colorPrimary,
+.MuiCard-root .MuiTypography-root[color="primary"] {
+  color: var(--pm-primary);
+}
+
+.MuiButton-containedPrimary {
+  background: var(--pm-btn-gradient) !important;
+  color: #fff !important;
+  box-shadow: 0 7px 18px var(--pm-primary-soft) !important;
+}
+.MuiButton-containedPrimary:hover {
+  background: var(--pm-btn-gradient-hover) !important;
+  box-shadow: 0 10px 24px var(--pm-primary-soft) !important;
+}
+.MuiButton-containedError {
+  background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.18) !important;
+}
+.MuiButton-outlined {
+  border-color: var(--pm-border) !important;
+  color: var(--pm-text-secondary) !important;
+  background: var(--pm-surface) !important;
+}
+.MuiButton-outlined:hover {
+  border-color: var(--pm-border-hover) !important;
+  background: var(--pm-primary-soft) !important;
+  color: var(--pm-primary-hover) !important;
+}
+.MuiButton-text:hover {
+  background: var(--pm-primary-soft) !important;
+}
+
+.MuiOutlinedInput-root {
+  background: var(--pm-surface) !important;
+}
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--pm-border-hover) !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--pm-primary) !important;
+  border-width: 1.5px !important;
+  box-shadow: 0 0 0 3px var(--pm-primary-soft);
+}
+
+.MuiTableContainer-root {
+  border: 1px solid var(--pm-border) !important;
+  border-radius: var(--pm-radius-card) !important;
+  overflow: hidden;
+  background: var(--pm-surface-solid) !important;
+  box-shadow: 0 5px 22px rgba(0, 0, 0, 0.055) !important;
+}
+.MuiTableHead-root .MuiTableCell-root {
+  background: var(--pm-table-head-bg) !important;
+  color: var(--pm-text-secondary) !important;
+  border-bottom: 1px solid var(--pm-border) !important;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+}
+.MuiTableBody-root .MuiTableRow-root {
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+.MuiTableBody-root .MuiTableRow-root:hover {
+  background: var(--pm-primary-soft) !important;
+}
+
+.MuiChip-colorSuccess {
+  background: #ecfdf3 !important;
+  color: #15803d !important;
+}
+.MuiChip-colorWarning {
+  background: #fff7e6 !important;
+  color: #b45309 !important;
+}
+.MuiChip-colorError {
+  background: #fff1f2 !important;
+  color: #b91c1c !important;
+}
+.MuiChip-colorInfo {
+  background: #ecf8ff !important;
+  color: #0369a1 !important;
+}
+
+.MuiTabs-indicator {
+  background: var(--pm-btn-gradient) !important;
+  height: 3px !important;
+  border-radius: 3px 3px 0 0;
+}
+.MuiTab-root.Mui-selected {
+  color: var(--pm-primary-hover) !important;
+  font-weight: 700 !important;
+}
+
+.MuiAlert-root {
+  border: 1px solid var(--pm-border);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.025);
+}
+
+.MuiDrawer-paper {
+  scrollbar-color: var(--pm-text-secondary) transparent;
+}
+
+/* ============================================================
+   CONTROL SIZING — kept consistent across themes
+   ============================================================ */
+.MuiButton-root {
+  height: var(--pm-control-height) !important;
+  min-height: var(--pm-control-height) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: var(--pm-control-radius) !important;
+  text-transform: none;
+  font-weight: 650;
+  letter-spacing: 0.005em;
+}
+.MuiOutlinedInput-root,
+.MuiFilledInput-root,
+.MuiInput-root {
+  min-height: var(--pm-control-height);
+  box-sizing: border-box;
+  border-radius: var(--pm-control-radius);
+}
+.MuiOutlinedInput-input,
+.MuiFilledInput-input,
+.MuiInput-input {
+  height: var(--pm-control-height) !important;
+  min-height: 0 !important;
+  box-sizing: border-box !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.MuiSelect-select {
+  min-height: 0 !important;
+  height: var(--pm-control-height) !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+.MuiInputBase-root:not(.MuiInputBase-multiline) {
+  min-height: var(--pm-control-height);
+}
+.MuiInputBase-root.MuiInputBase-multiline,
+.MuiInputBase-root:has(textarea) {
+  min-height: unset;
+  height: auto;
+}
+.MuiInputBase-inputMultiline {
+  height: auto !important;
+  min-height: 80px !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+.pm-search-field,
+.pm-search-field .MuiInputBase-root,
+.pm-search-field .MuiOutlinedInput-root {
+  height: var(--pm-control-height) !important;
+  min-height: var(--pm-control-height) !important;
+  box-sizing: border-box !important;
+}
+.pm-search-field .MuiInputBase-input {
+  height: auto !important;
+  min-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.pm-command-search-input {
+  min-height: var(--pm-control-height) !important;
+  height: var(--pm-control-height) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--pm-border) !important;
+  border-radius: var(--pm-control-radius) !important;
+  background: var(--pm-surface-solid) !important;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.pm-command-search-input:focus-within {
+  border-color: var(--pm-border-hover) !important;
+  box-shadow: 0 0 0 3px var(--pm-primary-soft);
+}
+.pm-command-search-input .MuiInputBase-root {
+  min-height: 0 !important;
+  height: 100% !important;
+}
+.MuiAutocomplete-root .MuiOutlinedInput-root {
+  min-height: var(--pm-control-height) !important;
+}
+.MuiAutocomplete-input {
+  height: auto !important;
+}
+.MuiIconButton-root {
+  flex-shrink: 0;
+}
+.MuiTableCell-root .MuiButton-root {
+  height: var(--pm-control-height) !important;
+}
+
+.auth-password-reset .MuiOutlinedInput-root {
+  min-height: 48px;
+  border-radius: 12px;
+}
+.auth-password-reset .MuiOutlinedInput-input {
+  height: 48px;
+  box-sizing: border-box;
+}
+.auth-password-reset .MuiButton-root {
+  min-height: 48px;
+  height: 48px;
+  border-radius: 12px;
+}

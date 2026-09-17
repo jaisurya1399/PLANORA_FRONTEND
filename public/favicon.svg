@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
+  <defs>
+    <linearGradient id="pmGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5D78E"/>
+      <stop offset="50%" stop-color="#C8A15A"/>
+      <stop offset="100%" stop-color="#8C6D1F"/>
+    </linearGradient>
+  </defs>
+
+  <circle
+    cx="17"
+    cy="17"
+    r="15.5"
+    stroke="url(#pmGold)"
+    stroke-width="1.6"
+  />
+
+  <circle
+    cx="17"
+    cy="17"
+    r="12.5"
+    stroke="#C8A15A"
+    stroke-width="0.6"
+    opacity="0.45"
+  />
+
+  <g
+    stroke="url(#pmGold)"
+    fill="none"
+    stroke-linecap="round"
+  >
+    <path
+      d="M 12 24 L 12 10"
+      stroke-width="2.4"
+    />
+
+    <path
+      d="M 12 10.5 C 19 9, 22 12, 22 15.5 C 22 19, 19 21, 12 20"
+      stroke-width="2.4"
+    />
+
+    <path
+      d="M 12 19 C 15.5 18.5, 17.5 20, 17.5 22.5"
+      stroke-width="1.5"
+      opacity="0.85"
+    />
+  </g>
+
+  <path
+    d="M 26 7 L 27 9.5 L 29.5 10.5 L 27 11.5 L 26 14 L 25 11.5 L 22.5 10.5 L 25 9.5 Z"
+    fill="#F5D78E"
+  />
+</svg>

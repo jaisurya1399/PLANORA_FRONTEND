@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="plGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9E7A0"/>
+      <stop offset="35%" stop-color="#E9C766"/>
+      <stop offset="60%" stop-color="#C8A15A"/>
+      <stop offset="100%" stop-color="#9A742B"/>
+    </linearGradient>
+    <linearGradient id="plGoldDeep" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D98C"/>
+      <stop offset="100%" stop-color="#B8893B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- thick outer ring -->
+  <circle cx="60" cy="60" r="54" fill="url(#plGold)"/>
+
+  <!-- inner disc: deep navy -->
+  <circle cx="60" cy="60" r="45.5" fill="#101223" stroke="url(#plGoldDeep)" stroke-width="1.4"/>
+
+  <!-- bold P: stem + bowl + elegant leg -->
+  <g fill="none" stroke="url(#plGold)" stroke-linecap="round">
+    <path d="M 44 88 L 44 34" stroke-width="10"/>
+    <path d="M 44 34 C 72 30, 86 40, 86 52 C 86 65, 71 72, 46 70" stroke-width="10"/>
+    <path d="M 46 70 C 62 70, 72 76, 72 86 C 72 91, 68 95, 63 95" stroke-width="7"/>
+  </g>
+
+  <!-- four-pointed star -->
+  <path d="M 82 26 L 84.5 33.5 L 92 36 L 84.5 38.5 L 82 46 L 79.5 38.5 L 72 36 L 79.5 33.5 Z" fill="url(#plGold)"/>
+</svg>
