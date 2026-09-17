@@ -105,20 +105,49 @@ export const authButtonSx = (success) => ({
   textTransform: "none",
   letterSpacing: "0.01em",
   fontFamily: UI_FONT,
+
+  // Normal
   backgroundColor: INK,
   color: PAPER,
+
   boxShadow: "none",
   mt: 0.5,
-  transition: "background-color 0.2s ease, transform 0.15s ease",
+
+  transition:
+    "background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease",
+
+  // Hover: swap background and text colors
   "&:hover": {
-    backgroundColor: SLATE,
-    boxShadow: "none",
+    backgroundColor: PAPER,
+    color: INK,
+    boxShadow: "0 4px 12px rgba(16, 18, 35, 0.12)",
     transform: "translateY(-1px)",
   },
-  "&:active": { transform: "translateY(0)" },
+
+  // Click
+  "&:active": {
+    backgroundColor: "#E9E8E3",
+    color: INK,
+    boxShadow: "none",
+    transform: "translateY(0)",
+  },
+
+  // Focus
+  "&:focus-visible": {
+    backgroundColor: PAPER,
+    color: INK,
+    boxShadow: `0 0 0 3px ${GOLD_SOFT}`,
+    outline: `2px solid ${GOLD}`,
+    outlineOffset: "2px",
+  },
+
+  // Disabled
   "&.Mui-disabled": {
-    backgroundColor: success ? "#2E7D5B" : "rgba(16,18,35,0.35)",
+    backgroundColor: success ? "#005f36" : "rgba(16,18,35,0.35)",
     color: PAPER,
+    boxShadow: "none",
+    transform: "none",
+    opacity: 1,
   },
 });
 
