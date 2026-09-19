@@ -21,7 +21,32 @@ const NotificationBell = ({ onNotificationClick }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
+  const STORAGE_KEY = "planora.notifications.v1";
+
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      if (Array.isArray(stored)) {
+        setNotifications(stored.slice(0, 50));
+        setUnreadCount(stored.filter((item) => !item.readAt).length);
+      }
+    } catch {
+      // Ignore corrupt local notification cache.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(notifications.slice(0, 50)),
+      );
+    } catch {
+      // Storage may be unavailable in private/restricted browsing modes.
+    }
+  }, [notifications]);
 
   /**
    * Receive notifications directly from FCM.
@@ -74,7 +99,7 @@ const NotificationBell = ({ onNotificationClick }) => {
           return previous;
         }
 
-        return [notification, ...previous].slice(0, 5);
+        return [notification, ...previous].slice(0, 50);
       });
 
       setUnreadCount((previous) => previous + 1);

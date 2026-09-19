@@ -67,7 +67,7 @@ export default class AppErrorBoundary extends Component {
           </Typography>
 
           <Box sx={{ display: "flex", gap: 1.5 }}>
-            <Button variant="contained" onClick={this.handleGoBack}>
+            <Button variant="contained" onClick={this.handleReload}>
               Reload page
             </Button>
             <Button variant="outlined" onClick={this.handleGoBack}>

@@ -77,7 +77,7 @@ export default function CommandSearch({
             fullWidth
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search pages, projects, tickets and people..."
+            placeholder="Search pages and navigation..."
             variant="standard"
             InputProps={{
               disableUnderline: true,
@@ -109,7 +109,7 @@ export default function CommandSearch({
               variant="caption"
               color="text.secondary"
             >
-              Quick navigation
+              Search pages
             </Typography>
             <Chip size="small" label="Esc to close" sx={{ height: 22 }} />
           </Box>
@@ -130,7 +130,7 @@ export default function CommandSearch({
                   primary={item.label}
                   secondary={item.group}
                   primaryTypographyProps={{ fontWeight: 650, fontSize: 14 }}
-                  secondaryTypographyProps={{ fontSize: 11 }}
+                  secondaryTypographyProps={{ fontSize: 12 }}
                 />
                 <KeyboardReturnRoundedIcon
                   sx={{ color: "text.disabled", fontSize: 17 }}

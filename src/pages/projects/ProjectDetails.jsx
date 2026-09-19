@@ -22,6 +22,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 import ProjectUserDialog from "../../components/projects/ProjectUserDialog";
 
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -114,7 +115,7 @@ export default function ProjectDetails() {
   };
 
   const removeMember = async (member) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Remove ${member.userName} from this project?`,
     );
 
@@ -319,7 +320,7 @@ export default function ProjectDetails() {
                   })
                 }
               >
-                Add Member
+                Add Project Member
               </Button>
             ) : null}
           </Stack>
@@ -372,6 +373,7 @@ export default function ProjectDetails() {
                                 assignment: member,
                               })
                             }
+                            aria-label="Edit"
                           >
                             <EditIcon />
                           </IconButton>
@@ -379,6 +381,7 @@ export default function ProjectDetails() {
                           <IconButton
                             color="error"
                             onClick={() => removeMember(member)}
+                            aria-label="Delete"
                           >
                             <DeleteIcon />
                           </IconButton>

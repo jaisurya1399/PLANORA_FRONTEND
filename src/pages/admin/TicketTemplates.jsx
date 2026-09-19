@@ -85,7 +85,7 @@ export default function TicketTemplates() {
   return (
     <Box className="app-page pm-fade-up">
       <Stack direction="row" justifyContent="space-between" mb={2}>
-        <Typography variant="h5">Issue Templates</Typography>
+        <Typography variant="h5">Ticket Templates</Typography>
         <Button variant="contained" onClick={() => setOpen(true)}>
           New Template
         </Button>
@@ -140,7 +140,7 @@ export default function TicketTemplates() {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Create Issue Template</DialogTitle>
+        <DialogTitle>Create Ticket Template</DialogTitle>
         <DialogContent>
           <Stack spacing={2} mt={1}>
             <TextField
@@ -157,7 +157,7 @@ export default function TicketTemplates() {
             </TextField>
             <TextField
               select
-              label="Issue Type"
+              label="Ticket Type"
               value={f.ticketTypeId}
               onChange={(e) => setF({ ...f, ticketTypeId: e.target.value })}
             >

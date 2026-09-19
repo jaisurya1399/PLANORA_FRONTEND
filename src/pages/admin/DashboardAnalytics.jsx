@@ -25,6 +25,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -363,7 +364,7 @@ export default function DashboardAnalytics() {
     await loadDashboards();
   };
   const remove = async (id) => {
-    if (!window.confirm("Delete this dashboard?")) return;
+    if (!(await requestConfirm("Delete this dashboard?"))) return;
     await deleteCustomDashboard(id);
     await loadDashboards();
     if (selected?.id === id) setSelected(null);

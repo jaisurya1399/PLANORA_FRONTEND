@@ -62,7 +62,7 @@ export function NightScene() {
             cy={s.cy}
             r={s.r}
             fill="#EDE9DF"
-            style={{ animation: `twinkle 5.5s ease-in-out ${s.d}s infinite` }}
+            style={{ animation: `twinkle 8s ease-in-out ${s.d}s infinite` }}
           />
         ))}
 
@@ -72,7 +72,7 @@ export function NightScene() {
           cy="150"
           r="110"
           fill="url(#lpGlow)"
-          style={{ animation: "breathe 7s ease-in-out 1.6s infinite" }}
+          style={{ animation: "breathe 10s ease-in-out 1.6s infinite" }}
         />
         <circle
           className="lp-anim"
@@ -181,7 +181,7 @@ export default function AuthShell({
   const reveal = (delay) => ({
     opacity: mounted ? 1 : 0,
     transform: mounted ? "translateY(0)" : "translateY(12px)",
-    transition: `opacity 0.6s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
+    transition: `opacity 0.42s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.42s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
   });
 
   return (

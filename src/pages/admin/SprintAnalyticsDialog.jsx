@@ -968,21 +968,21 @@ export default function SprintAnalyticsDialog({
                     <Grid container spacing={1.5}>
                       <Grid item xs={6} md={3}>
                         <Stat
-                          label="Total Issues"
+                          label="Total Tickets"
                           value={effectiveStatistics.totalTickets}
                           color={COLORS.primary}
                         />
                       </Grid>
                       <Grid item xs={6} md={3}>
                         <Stat
-                          label="Assigned Issues"
+                          label="Assigned Tickets"
                           value={effectiveStatistics.assignedTickets}
                           color={COLORS.blue}
                         />
                       </Grid>
                       <Grid item xs={6} md={3}>
                         <Stat
-                          label="Unassigned Issues"
+                          label="Unassigned Tickets"
                           value={effectiveStatistics.backlogTickets}
                           color={COLORS.amber}
                         />
@@ -1295,7 +1295,7 @@ export default function SprintAnalyticsDialog({
                       </Grid>
                       <Grid item xs={6} md={3}>
                         <Stat
-                          label="Incomplete Issues"
+                          label="Incomplete Tickets"
                           value={effectiveReport.incompleteTickets}
                           color={COLORS.amber}
                         />
@@ -1363,7 +1363,7 @@ export default function SprintAnalyticsDialog({
                       ) : (
                         <Box sx={{ p: 3 }}>
                           <Typography color={COLORS.textSecondary}>
-                            No sprint issues were found.
+                            No sprint tickets were found.
                           </Typography>
                         </Box>
                       )}
@@ -1469,7 +1469,7 @@ export default function SprintAnalyticsDialog({
                           variant="body2"
                           color={COLORS.textSecondary}
                         >
-                          Current sprint issues:{" "}
+                          Current sprint tickets:{" "}
                           <b>{effectiveCommitment.currentTickets}</b>
                         </Typography>
                       </Stack>

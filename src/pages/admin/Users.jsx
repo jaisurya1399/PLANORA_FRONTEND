@@ -596,6 +596,7 @@ export default function Users() {
                   border: "1px solid",
                   borderColor: "divider",
                 }}
+                aria-label="Refresh"
               >
                 {loading ? <CircularProgress size={22} /> : <RefreshIcon />}
               </IconButton>
@@ -712,6 +713,7 @@ export default function Users() {
                             <IconButton
                               size="small"
                               onClick={() => handleToggleExpand(user.id)}
+                              aria-label="Open menu"
                             >
                               {isExpanded ? (
                                 <KeyboardArrowUpIcon fontSize="small" />
@@ -748,6 +750,7 @@ export default function Users() {
                                   color="primary"
                                   onClick={() => handleEdit(user)}
                                   disabled={saving || deleting}
+                                  aria-label="Edit"
                                 >
                                   <EditIcon />
                                 </IconButton>
@@ -762,6 +765,7 @@ export default function Users() {
                                   color="error"
                                   onClick={() => handleDeleteClick(user)}
                                   disabled={saving || deleting}
+                                  aria-label="Delete"
                                 >
                                   <DeleteIcon />
                                 </IconButton>

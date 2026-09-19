@@ -88,7 +88,7 @@ export default function ProjectUserDialog({
               label="Project Access"
               onChange={(e) => handleRoleChange(e.target.value)}
             >
-              <MenuItem value="PROJECT_ADMIN">Project Admin</MenuItem>
+              <MenuItem value="PROJECT_ADMIN">Project Administrator</MenuItem>
               <MenuItem value="TEAM_LEAD">Team Lead</MenuItem>
               <MenuItem value="DEVELOPER">Developer</MenuItem>
             </Select>

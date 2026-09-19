@@ -187,6 +187,7 @@ export default function TicketDocuments({ ticketId }) {
               <IconButton
                 color="primary"
                 onClick={() => handleDownload(document)}
+                aria-label="Download"
               >
                 <DownloadIcon />
               </IconButton>
@@ -194,6 +195,7 @@ export default function TicketDocuments({ ticketId }) {
               <IconButton
                 color="error"
                 onClick={() => handleDelete(document.id)}
+                aria-label="Delete"
               >
                 <DeleteIcon />
               </IconButton>

@@ -18,6 +18,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -97,7 +98,7 @@ export default function ProjectTemplates() {
     }
   };
   const remove = async (id) => {
-    if (!window.confirm("Delete this project template?")) return;
+    if (!(await requestConfirm("Delete this project template?"))) return;
     try {
       await deleteProjectTemplate(id);
       await load();

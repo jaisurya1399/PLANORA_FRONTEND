@@ -123,6 +123,9 @@ export const ToastProvider = ({ children }) => {
       {children}
 
       <Snackbar
+        role="status"
+        aria-live={toast.severity === "error" ? "assertive" : "polite"}
+        aria-atomic="true"
         open={toast.open}
         autoHideDuration={5000}
         onClose={closeToast}

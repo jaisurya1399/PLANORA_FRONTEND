@@ -639,6 +639,7 @@ function MeetingDiscussion({
                     component="a"
                     href={`/api/documents/${d.documentId}/download`}
                     target="_blank"
+                    aria-label="Open in new window"
                   >
                     <OpenInNewRoundedIcon fontSize="small" />
                   </IconButton>
@@ -647,6 +648,7 @@ function MeetingDiscussion({
                   <IconButton
                     size="small"
                     onClick={() => onRemoveDoc(d.documentId)}
+                    aria-label="Delete"
                   >
                     <DeleteOutlineRoundedIcon fontSize="small" />
                   </IconButton>
@@ -719,7 +721,7 @@ export default function CommunicationHub() {
     setProjects(projectList);
     setProjectId(projectList.length ? String(projectList[0].id) : "");
 
-    // Direct Chat users are project-scoped: System Admins + members of the
+    // Direct Chat users are project-scoped: System Administrators + members of the
     // currently selected project. Do not call the global /users endpoint here.
     if (activeId) {
       getDirectChatUsers(activeId)

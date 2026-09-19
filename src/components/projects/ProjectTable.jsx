@@ -117,13 +117,13 @@ export default function ProjectTable({
 
               <TableCell align="right">
                 <Tooltip title="View">
-                  <IconButton onClick={() => onView(project)}>
+                  <IconButton onClick={() => onView(project)} aria-label="View">
                     <VisibilityIcon />
                   </IconButton>
                 </Tooltip>
 
                 <Tooltip title="Edit">
-                  <IconButton onClick={() => onEdit(project)}>
+                  <IconButton onClick={() => onEdit(project)} aria-label="Edit">
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
@@ -133,13 +133,18 @@ export default function ProjectTable({
                     <IconButton
                       color="success"
                       onClick={() => onRestore(project)}
+                      aria-label="Restore"
                     >
                       <RestoreIcon />
                     </IconButton>
                   </Tooltip>
                 ) : (
                   <Tooltip title="Delete">
-                    <IconButton color="error" onClick={() => onDelete(project)}>
+                    <IconButton
+                      color="error"
+                      onClick={() => onDelete(project)}
+                      aria-label="Delete"
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>

@@ -127,10 +127,10 @@ export default function FieldConfigurations() {
           </Select>
         </FormControl>
         <FormControl sx={{ minWidth: 180 }}>
-          <InputLabel>Issue Type</InputLabel>
+          <InputLabel>Ticket Type</InputLabel>
           <Select
             value={form.ticketTypeId}
-            label="Issue Type"
+            label="Ticket Type"
             onChange={(e) => setForm({ ...form, ticketTypeId: e.target.value })}
           >
             <MenuItem value="">All Types</MenuItem>

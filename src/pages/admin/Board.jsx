@@ -32,7 +32,7 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getBoardColumns,
@@ -163,7 +163,7 @@ function EmptyState({ icon: Icon, message }) {
    Ticket card - Improved design
 ----------------------------------------------------------------------- */
 
-function TicketCard({ ticket, onClick, onDragStart, showEpic }) {
+function TicketCard({ ticket, onClick, onDragStart, onDragEnd, showEpic }) {
   const theme = useTheme();
   const initials = (ticket.responsibleName || "?")
     .trim()
@@ -177,6 +177,7 @@ function TicketCard({ ticket, onClick, onDragStart, showEpic }) {
     <Card
       draggable
       onDragStart={(e) => onDragStart(e, ticket)}
+      onDragEnd={onDragEnd}
       onClick={() => onClick(ticket.id)}
       elevation={0}
       sx={{
@@ -356,7 +357,14 @@ function TicketCard({ ticket, onClick, onDragStart, showEpic }) {
    Board column - Improved design
 ----------------------------------------------------------------------- */
 
-function BoardColumn({ column, tickets, onTicketClick, onDragStart, onDrop }) {
+function BoardColumn({
+  column,
+  tickets,
+  onTicketClick,
+  onDragStart,
+  onDragEnd,
+  onDrop,
+}) {
   const theme = useTheme();
   const [dragOver, setDragOver] = useState(false);
   const limit = Number(column.wipLimit || 0);
@@ -369,9 +377,15 @@ function BoardColumn({ column, tickets, onTicketClick, onDragStart, onDrop }) {
       elevation={0}
       onDragOver={(e) => {
         e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
         setDragOver(true);
       }}
-      onDragLeave={() => setDragOver(false)}
+      onDragLeave={(e) => {
+        // Only clear when the pointer leaves the actual column.
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          setDragOver(false);
+        }
+      }}
       onDrop={(e) => {
         setDragOver(false);
         onDrop(e, column);
@@ -475,6 +489,7 @@ function BoardColumn({ column, tickets, onTicketClick, onDragStart, onDrop }) {
               ticket={ticket}
               onClick={onTicketClick}
               onDragStart={onDragStart}
+              onDragEnd={onDragEnd}
               showEpic={column.showEpic}
             />
           ))
@@ -813,6 +828,9 @@ export default function Board() {
   const [cfdOpen, setCfdOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
 
+  // Prevent a click event from firing after a drag operation.
+  const isDraggingRef = useRef(false);
+
   const currentUserId = Number(
     user?.id ?? user?.userId ?? user?.sub ?? user?._id ?? user?.employeeId,
   );
@@ -896,17 +914,25 @@ export default function Board() {
   }, [selectedProjectId, loadBoard]);
 
   const displayColumns = useMemo(() => {
+    const sortTickets = (tickets = []) =>
+      [...tickets].sort((a, b) => Number(a.id) - Number(b.id));
+
     if (config?.activeSprintOnly !== false && activeSprint) {
       return columns.map((c) => ({
         ...c,
-        tickets: (c.tickets || []).filter(
-          (t) => Number(t.sprintId) === Number(activeSprint.id),
+        tickets: sortTickets(
+          (c.tickets || []).filter(
+            (t) => Number(t.sprintId) === Number(activeSprint.id),
+          ),
         ),
       }));
     }
-    return columns;
-  }, [columns, activeSprint, config]);
 
+    return columns.map((c) => ({
+      ...c,
+      tickets: sortTickets(c.tickets || []),
+    }));
+  }, [columns, activeSprint, config]);
   const filteredColumns = useMemo(() => {
     if (
       ticketScope === TICKET_SCOPE.ALL ||
@@ -976,86 +1002,210 @@ export default function Board() {
     }));
   }, [config, filteredColumns]);
 
-  const handleDragStart = (e, ticket) => {
+  const handleDragStart = useCallback((e, ticket) => {
+    if (!ticket?.id || ticket?.statusId == null) {
+      e.preventDefault();
+      return;
+    }
+
+    isDraggingRef.current = true;
+
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData(
-      "text/plain",
-      JSON.stringify({ ticketId: ticket.id, fromStatusId: ticket.statusId }),
-    );
-  };
-
-  const handleDrop = async (e, target) => {
-    e.preventDefault();
-
-    let payload = {};
-    try {
-      payload = JSON.parse(e.dataTransfer.getData("text/plain") || "{}");
-    } catch {
-      return;
-    }
-
-    const { ticketId, fromStatusId } = payload;
-    if (!ticketId || Number(fromStatusId) === Number(target.statusId)) return;
-
-    const limit = Number(target.wipLimit || 0);
-    const targetCount = (
-      columns.find((c) => Number(c.statusId) === Number(target.statusId))
-        ?.tickets || []
-    ).length;
-
-    if (config?.enforceWip && limit > 0 && targetCount >= limit) {
-      toast.error(
-        `WIP limit reached for ${target.displayName || target.statusName} (${limit}).`,
-      );
-      return;
-    }
-
-    const previous = columns;
-    setColumns((prev) =>
-      prev.map((c) => {
-        if (Number(c.statusId) === Number(fromStatusId)) {
-          return {
-            ...c,
-            tickets: (c.tickets || []).filter(
-              (t) => Number(t.id) !== Number(ticketId),
-            ),
-          };
-        }
-        if (Number(c.statusId) === Number(target.statusId)) {
-          const moved = previous
-            .flatMap((x) => x.tickets || [])
-            .find((t) => Number(t.id) === Number(ticketId));
-          return moved
-            ? {
-                ...c,
-                tickets: [
-                  ...(c.tickets || []),
-                  {
-                    ...moved,
-                    statusId: target.statusId,
-                    statusName: target.statusName,
-                    statusColor: target.statusColor,
-                    statusCategory: target.category,
-                  },
-                ],
-              }
-            : c;
-        }
-        return c;
+      "application/json",
+      JSON.stringify({
+        ticketId: Number(ticket.id),
+        fromStatusId: Number(ticket.statusId),
       }),
     );
 
+    // Required by some browsers for reliable HTML5 drag/drop.
     try {
-      await transitionTicket(ticketId, target.statusId);
-    } catch (err) {
-      setColumns(previous);
-      toast.error(
-        err?.response?.data?.message ||
-          err?.message ||
-          "Failed to move ticket. It has been reverted.",
+      e.dataTransfer.setData(
+        "text/plain",
+        JSON.stringify({
+          ticketId: Number(ticket.id),
+          fromStatusId: Number(ticket.statusId),
+        }),
       );
+    } catch {
+      // Ignore clipboard/dataTransfer fallback errors.
     }
-  };
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    // Delay reset so the click generated immediately after drag is ignored.
+    window.setTimeout(() => {
+      isDraggingRef.current = false;
+    }, 0);
+  }, []);
+
+  const handleTicketClick = useCallback(
+    (ticketId) => {
+      if (isDraggingRef.current) return;
+      navigate(`${workspaceBase}/tickets/${ticketId}`);
+    },
+    [navigate, workspaceBase],
+  );
+
+  const handleDrop = useCallback(
+    async (e, target) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!target?.statusId) return;
+
+      let payload = {};
+      const raw =
+        e.dataTransfer.getData("application/json") ||
+        e.dataTransfer.getData("text/plain") ||
+        "";
+
+      try {
+        payload = JSON.parse(raw);
+      } catch {
+        return;
+      }
+
+      const ticketId = Number(payload?.ticketId);
+      const fromStatusId = Number(payload?.fromStatusId);
+      const targetStatusId = Number(target.statusId);
+
+      if (
+        !Number.isFinite(ticketId) ||
+        !Number.isFinite(fromStatusId) ||
+        !Number.isFinite(targetStatusId)
+      ) {
+        return;
+      }
+
+      // Dropping into the same status is a no-op.
+      if (fromStatusId === targetStatusId) {
+        isDraggingRef.current = false;
+        return;
+      }
+
+      const sourceColumn = columns.find(
+        (c) => Number(c.statusId) === fromStatusId,
+      );
+      const targetColumn = columns.find(
+        (c) => Number(c.statusId) === targetStatusId,
+      );
+
+      const movedTicket =
+        sourceColumn?.tickets?.find((t) => Number(t.id) === ticketId) ||
+        columns
+          .flatMap((c) => c.tickets || [])
+          .find((t) => Number(t.id) === ticketId);
+
+      if (!movedTicket) {
+        isDraggingRef.current = false;
+        toast.error("Ticket could not be found on the board.");
+        return;
+      }
+
+      const limit = Number(target.wipLimit || 0);
+      const targetCount = targetColumn?.tickets?.length || 0;
+
+      if (config?.enforceWip && limit > 0 && targetCount >= limit) {
+        isDraggingRef.current = false;
+        toast.error(
+          `WIP limit reached for ${
+            target.displayName || target.statusName
+          } (${limit}).`,
+        );
+        return;
+      }
+
+      // Keep an immutable snapshot for rollback.
+      const previous = columns.map((column) => ({
+        ...column,
+        tickets: [...(column.tickets || [])],
+      }));
+
+      const updatedColumns = previous.map((column) => {
+        const statusId = Number(column.statusId);
+
+        // Remove ticket from its actual source column.
+        if (statusId === fromStatusId) {
+          return {
+            ...column,
+            tickets: (column.tickets || []).filter(
+              (ticket) => Number(ticket.id) !== ticketId,
+            ),
+          };
+        }
+
+        // Add ticket to target column.
+        if (statusId === targetStatusId) {
+          const alreadyExists = (column.tickets || []).some(
+            (ticket) => Number(ticket.id) === ticketId,
+          );
+
+          if (alreadyExists) return column;
+
+          return {
+            ...column,
+            tickets: [
+              ...(column.tickets || []),
+              {
+                ...movedTicket,
+                statusId: targetStatusId,
+                statusName: target.statusName,
+                statusColor: target.statusColor,
+                statusCategory: target.category,
+              },
+            ],
+          };
+        }
+
+        return column;
+      });
+
+      // Always keep board tickets numerically sorted after a move.
+      const sortTickets = (tickets = []) =>
+        [...tickets].sort((a, b) => {
+          const aId = Number(a?.id);
+          const bId = Number(b?.id);
+
+          if (!Number.isFinite(aId) && !Number.isFinite(bId)) return 0;
+          if (!Number.isFinite(aId)) return 1;
+          if (!Number.isFinite(bId)) return -1;
+
+          return aId - bId;
+        });
+
+      const sortedColumns = updatedColumns.map((column) => ({
+        ...column,
+        tickets: sortTickets(column.tickets || []),
+      }));
+
+      setColumns(sortedColumns);
+
+      try {
+        await transitionTicket(ticketId, targetStatusId);
+
+        toast.success(
+          `Ticket ${movedTicket.code || `#${ticketId}`} moved to ${
+            target.displayName || target.statusName
+          }.`,
+        );
+      } catch (err) {
+        setColumns(previous);
+
+        toast.error(
+          err?.response?.data?.message ||
+            err?.message ||
+            "Failed to move ticket. The board has been reverted.",
+        );
+      } finally {
+        window.setTimeout(() => {
+          isDraggingRef.current = false;
+        }, 0);
+      }
+    },
+    [columns, config, toast],
+  );
 
   const saveConfiguration = async (form, rows) => {
     const [cfg, cols] = await Promise.all([

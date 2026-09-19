@@ -26,8 +26,8 @@ function statusChip(status) {
 export default function Dashboard() {
   const [dashboard, setDashboard] = useState({
     myProjects: 0,
-    myTasks: 0,
-    pendingTasks: 0,
+    myTickets: 0,
+    pendingTickets: 0,
     hoursThisWeek: 0,
     recentActivity: [],
   });
@@ -41,8 +41,8 @@ export default function Dashboard() {
       const data = await getDeveloperDashboard();
       setDashboard({
         myProjects: data?.myProjects ?? 0,
-        myTasks: data?.myTasks ?? 0,
-        pendingTasks: data?.pendingTasks ?? 0,
+        myTickets: data?.myTickets ?? 0,
+        pendingTickets: data?.pendingTickets ?? 0,
         hoursThisWeek: data?.hoursThisWeek ?? 0,
         recentActivity: Array.isArray(data?.recentActivity)
           ? data.recentActivity
@@ -95,15 +95,15 @@ export default function Dashboard() {
       path: "/member/developer/projects",
     },
     {
-      title: "My tasks",
-      value: dashboard.myTasks,
+      title: "My Tickets",
+      value: dashboard.myTickets,
       icon: <AssignmentOutlinedIcon />,
       tone: "success",
-      path: "/member/developer/tasks",
+      path: "/member/developer/tickets",
     },
     {
-      title: "Pending tasks",
-      value: dashboard.pendingTasks,
+      title: "Pending tickets",
+      value: dashboard.pendingTickets,
       icon: <HourglassBottomRoundedIcon />,
       tone: "warning",
     },

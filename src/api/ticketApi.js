@@ -78,19 +78,19 @@ export const getDeletedTickets = async () => {
   return response.data;
 };
 
-export const getMyTasks = async () => {
-  const response = await api.get("/tickets/my-tasks");
+export const getMyTickets = async () => {
+  const response = await api.get("/tickets/my-tickets");
 
   return response.data;
 };
 
-export const getMyTasksAll = async () => {
-  const response = await api.get("/tickets/my-tasks/all");
+export const getMyTicketsAll = async () => {
+  const response = await api.get("/tickets/my-tickets/all");
   return response.data;
 };
 
-export const getMyResolvedTasks = async () => {
-  const response = await api.get("/tickets/my-tasks/resolved");
+export const getMyResolvedTickets = async () => {
+  const response = await api.get("/tickets/my-tickets/resolved");
   return response.data;
 };
 

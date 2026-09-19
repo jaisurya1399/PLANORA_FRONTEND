@@ -98,14 +98,16 @@ export default function ProjectForm({
     }
 
     if (!form.projectAdminIds?.length || form.projectAdminIds.length > 2) {
-      setError("Select 1 or 2 Project Admins.");
+      setError("Select 1 or 2 Project Administrators.");
       return;
     }
 
     if (
       !form.projectAdminIds.some((id) => Number(id) === Number(form.ownerId))
     ) {
-      setError("Project Owner must also be selected as a Project Admin.");
+      setError(
+        "Project Owner must also be selected as a Project Administrator.",
+      );
       return;
     }
 
@@ -182,11 +184,11 @@ export default function ProjectForm({
         </FormControl>
 
         <FormControl fullWidth required>
-          <InputLabel>Project Admins</InputLabel>
+          <InputLabel>Project Administrators</InputLabel>
           <Select
             multiple
             value={form.projectAdminIds}
-            label="Project Admins"
+            label="Project Administrators"
             onChange={(event) =>
               setForm({ ...form, projectAdminIds: event.target.value })
             }

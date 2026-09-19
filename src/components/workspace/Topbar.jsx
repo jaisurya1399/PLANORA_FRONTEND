@@ -20,14 +20,14 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import PlanoraLogo from "../../PlanoraLogo";
-import { BORDER, PRIMARY, TOPBAR } from "../../theme/colors";
+import { BORDER, PRIMARY, SURFACE_SUBTLE, TOPBAR } from "../../theme/colors";
 import { getWorkspaceBase } from "../../utils/navigation";
 import MemberAvatar from "../common/MemberAvatar";
 
 const SEARCH_LABELS = [
   ["Dashboard", ""],
   ["My Projects", "/projects"],
-  ["My Tasks", "/tasks"],
+  ["My Tickets", "/tickets"],
   ["Board", "/board"],
   ["Daily Scrum", "/daily-scrum"],
   ["AI Project Manager", "/ai-pm"],
@@ -75,7 +75,7 @@ export default function Topbar({ onMenuClick }) {
           : notification.data;
       if (d?.ticketId)
         return navigate(`${workspaceBase}/tickets/${d.ticketId}`);
-      if (d?.taskId) return navigate(`${workspaceBase}/tasks`);
+      if (d?.taskId) return navigate(`${workspaceBase}/tickets`);
       if (d?.projectId) return navigate(`${workspaceBase}/projects`);
     } catch {
       // Malformed notification payload — fall through to the default route.
@@ -122,7 +122,7 @@ export default function Topbar({ onMenuClick }) {
           >
             <PlanoraLogo size={30} showText={false} />
           </Box>
-          <Box sx={{ display: { xs: "none", sm: "block" }, minWidth: 170 }}>
+          <Box sx={{ display: { xs: "none", lg: "block" }, minWidth: 150 }}>
             <Typography sx={{ fontSize: 14, fontWeight: 800 }}>
               Team Workspace
             </Typography>
@@ -135,20 +135,21 @@ export default function Topbar({ onMenuClick }) {
             startIcon={<SearchRoundedIcon fontSize="small" />}
             sx={{
               flex: 1,
+              minWidth: { xs: 0, sm: 220, md: 300 },
               maxWidth: 560,
               mx: { xs: 0, md: "auto" },
               justifyContent: "flex-start",
               textTransform: "none",
               color: "text.secondary",
-              bgcolor: "#F3F5FF",
+              bgcolor: SURFACE_SUBTLE,
               border: `1px solid ${BORDER}`,
               borderRadius: 2.5,
               minHeight: 40,
               px: 1.5,
-              "&:hover": { bgcolor: "#EAECFF" },
+              "&:hover": { bgcolor: SURFACE_SUBTLE },
             }}
           >
-            Search projects, tasks and people...
+            Search projects, tickets and people...
           </Button>
           <Box
             sx={{ display: "flex", alignItems: "center", gap: 0.5, ml: "auto" }}
@@ -195,10 +196,10 @@ export default function Topbar({ onMenuClick }) {
         <MenuItem
           onClick={() => {
             setCreateAnchor(null);
-            navigate(`${workspaceBase}/tasks`);
+            navigate(`${workspaceBase}/tickets`);
           }}
         >
-          Create task
+          Create ticket
         </MenuItem>
       </Menu>
       <Menu
@@ -221,7 +222,9 @@ export default function Topbar({ onMenuClick }) {
             logout();
           }}
         >
-          <LogoutIcon sx={{ mr: 1.25, fontSize: 19 }} />
+          <LogoutIcon
+            sx={{ mr: 1.25, fontSize: 19, color: "text.secondary" }}
+          />
           Sign out
         </MenuItem>
       </Menu>

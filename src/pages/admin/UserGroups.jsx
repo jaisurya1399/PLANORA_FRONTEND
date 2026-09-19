@@ -18,6 +18,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import { useEffect, useState } from "react";
 import { getUsers } from "../../api/userApi";
@@ -69,7 +70,7 @@ export default function UserGroups() {
     }
   };
   const remove = async (id) => {
-    if (!window.confirm("Delete this user group?")) return;
+    if (!(await requestConfirm("Delete this user group?"))) return;
     try {
       await deleteUserGroup(id);
       await load();
@@ -157,10 +158,11 @@ export default function UserGroups() {
                       });
                       setOpen(true);
                     }}
+                    aria-label="Edit"
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => remove(g.id)}>
+                  <IconButton onClick={() => remove(g.id)} aria-label="Delete">
                     <DeleteIcon />
                   </IconButton>
                 </Box>

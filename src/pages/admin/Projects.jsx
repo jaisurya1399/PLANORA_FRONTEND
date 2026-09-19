@@ -947,6 +947,7 @@ export default function Projects() {
             <IconButton
               onClick={loadProjects}
               disabled={loading || saving || deleting || restoring || archiving}
+              aria-label="Refresh"
             >
               <RefreshIcon />
             </IconButton>
@@ -1065,6 +1066,7 @@ export default function Projects() {
                               togglingFavoriteId === Number(project.id) ||
                               favoritesLoading
                             }
+                            aria-label="Favorite"
                           >
                             {favoriteProjectIds.has(Number(project.id)) ? (
                               <StarIcon fontSize="small" color="warning" />
@@ -1148,6 +1150,7 @@ export default function Projects() {
                               restoring ||
                               Boolean(project.deletedAt || project.archivedAt)
                             }
+                            aria-label="Manage members"
                           >
                             <GroupIcon />
                           </IconButton>
@@ -1167,6 +1170,7 @@ export default function Projects() {
                               restoring ||
                               Boolean(project.deletedAt || project.archivedAt)
                             }
+                            aria-label="Edit"
                           >
                             <EditIcon />
                           </IconButton>
@@ -1186,6 +1190,7 @@ export default function Projects() {
                               disabled={
                                 archiving || saving || deleting || restoring
                               }
+                              aria-label="Archive"
                             >
                               {project.archivedAt ? (
                                 <UnarchiveIcon />
@@ -1206,6 +1211,7 @@ export default function Projects() {
                               color="success"
                               onClick={() => handleRestore(project)}
                               disabled={restoring || saving || deleting}
+                              aria-label="Restore"
                             >
                               {restoring ? (
                                 <CircularProgress size={20} />
@@ -1222,6 +1228,7 @@ export default function Projects() {
                               color="error"
                               onClick={() => handleDeleteClick(project)}
                               disabled={deleting || saving || restoring}
+                              aria-label="Delete"
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -1433,7 +1440,7 @@ export default function Projects() {
         <DialogTitle>
           <Box>
             <Typography variant="h6" fontWeight={700}>
-              Manage Project Users
+              Manage Project Members
             </Typography>
 
             <Typography variant="body2" color="text.secondary">
@@ -1519,7 +1526,9 @@ export default function Projects() {
                   }}
                   disabled={addingProjectUser || loadingFormData}
                 >
-                  <MenuItem value="PROJECT_ADMIN">Project Admin</MenuItem>
+                  <MenuItem value="PROJECT_ADMIN">
+                    Project Administrator
+                  </MenuItem>
                   <MenuItem value="MEMBER">Member</MenuItem>
                   <MenuItem value="VIEWER">Viewer</MenuItem>
                 </Select>
@@ -1590,7 +1599,7 @@ export default function Projects() {
           ================================================== */}
 
           <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5 }}>
-            Assigned Users
+            Assigned Members
           </Typography>
 
           {loadingProjectUsers ? (
@@ -1678,6 +1687,7 @@ export default function Projects() {
                                 handleRemoveProjectUser(projectUser)
                               }
                               disabled={removingProjectUser}
+                              aria-label="Delete"
                             >
                               {removingProjectUser ? (
                                 <CircularProgress size={20} />

@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RestoreIcon from "@mui/icons-material/Restore";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import {
   Alert,
@@ -162,9 +163,11 @@ const Epics = () => {
     if (selectedProjectId) {
       loadEpics(selectedProjectId);
       loadMilestones(selectedProjectId);
+      loadProjectUsers(selectedProjectId);
     } else {
       setEpics([]);
       setMilestones([]);
+      setUsers([]);
       setExpandedEpicIds([]);
       setEpicTickets({});
     }
@@ -393,7 +396,7 @@ const Epics = () => {
   };
 
   const handleDeleteEpic = async (epic) => {
-    const confirmed = window.confirm(`Delete epic "${epic.name}"?`);
+    const confirmed = await requestConfirm(`Delete epic "${epic.name}"?`);
 
     if (!confirmed) return;
 
@@ -490,29 +493,47 @@ const Epics = () => {
         getTicketPriorities(),
       ]);
 
-      if (selectedProjectId) {
-        const members = await getProjectUsers(Number(selectedProjectId));
-        setUsers(
-          Array.isArray(members)
-            ? members
-                .map((m) => ({
-                  id: m.userId ?? m.user?.id,
-                  name: m.userName ?? m.user?.name,
-                  fullName: m.userFullName ?? m.user?.fullName,
-                  email: m.userEmail ?? m.user?.email,
-                  role: m.role,
-                }))
-                .filter((u) => u.id != null)
-            : [],
-        );
-      } else {
-        setUsers([]);
-      }
       setTicketStatuses(Array.isArray(statusesData) ? statusesData : []);
       setTicketTypes(Array.isArray(typesData) ? typesData : []);
       setTicketPriorities(Array.isArray(prioritiesData) ? prioritiesData : []);
     } catch (error) {
-      showMessage("Failed to load ticket master data", "error");
+      console.error("Failed to load ticket master data:", error);
+      showMessage(
+        error?.response?.data?.message || "Failed to load ticket master data",
+        "error",
+      );
+    }
+  };
+
+  const loadProjectUsers = async (projectId) => {
+    if (!projectId) {
+      setUsers([]);
+      return;
+    }
+
+    try {
+      const members = await getProjectUsers(Number(projectId));
+
+      const projectUsers = Array.isArray(members)
+        ? members
+            .map((m) => ({
+              id: m.userId ?? m.user?.id,
+              name: m.userName ?? m.user?.name,
+              fullName: m.userFullName ?? m.user?.fullName,
+              email: m.userEmail ?? m.user?.email,
+              role: m.role,
+            }))
+            .filter((u) => u.id != null)
+        : [];
+
+      setUsers(projectUsers);
+    } catch (error) {
+      console.error("Failed to load project users:", error);
+      setUsers([]);
+      showMessage(
+        error?.response?.data?.message || "Failed to load project users",
+        "error",
+      );
     }
   };
 
@@ -708,7 +729,7 @@ const Epics = () => {
   };
 
   const handleDeleteTicket = async (ticket, epicId) => {
-    const confirmed = window.confirm(`Delete ticket "${ticket.name}"?`);
+    const confirmed = await requestConfirm(`Delete ticket "${ticket.name}"?`);
 
     if (!confirmed) return;
 
@@ -877,7 +898,10 @@ const Epics = () => {
                   {/* EPIC HEADER */}
 
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <IconButton onClick={() => toggleEpic(epic.id)}>
+                    <IconButton
+                      onClick={() => toggleEpic(epic.id)}
+                      aria-label="Expand"
+                    >
                       {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
 
@@ -923,13 +947,17 @@ const Epics = () => {
                           <IconButton
                             color="primary"
                             onClick={() => openCreateTicket(epic)}
+                            aria-label="Create ticket"
                           >
                             <TicketIcon />
                           </IconButton>
                         </Tooltip>
 
                         <Tooltip title="Edit Epic">
-                          <IconButton onClick={() => openEditEpic(epic)}>
+                          <IconButton
+                            onClick={() => openEditEpic(epic)}
+                            aria-label="Edit"
+                          >
                             <EditIcon />
                           </IconButton>
                         </Tooltip>
@@ -938,6 +966,7 @@ const Epics = () => {
                           <IconButton
                             color="info"
                             onClick={() => openAnalytics(epic)}
+                            aria-label="View analytics"
                           >
                             <AssessmentIcon />
                           </IconButton>
@@ -947,6 +976,7 @@ const Epics = () => {
                           <IconButton
                             color="error"
                             onClick={() => handleDeleteEpic(epic)}
+                            aria-label="Delete"
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -959,6 +989,7 @@ const Epics = () => {
                         <IconButton
                           color="success"
                           onClick={() => handleRestoreEpic(epic)}
+                          aria-label="Restore"
                         >
                           <RestoreIcon />
                         </IconButton>
@@ -1067,6 +1098,7 @@ const Epics = () => {
                                 <Tooltip title="Edit Ticket">
                                   <IconButton
                                     onClick={() => openEditTicket(ticket, epic)}
+                                    aria-label="Edit"
                                   >
                                     <EditIcon />
                                   </IconButton>
@@ -1078,6 +1110,7 @@ const Epics = () => {
                                     onClick={() =>
                                       handleDeleteTicket(ticket, epic.id)
                                     }
+                                    aria-label="Delete"
                                   >
                                     <DeleteIcon />
                                   </IconButton>
@@ -1339,20 +1372,28 @@ const Epics = () => {
 
             {/* Owner */}
 
-            <FormControl fullWidth>
+            <FormControl fullWidth required>
               <InputLabel>Owner</InputLabel>
-
               <Select
                 name="ownerId"
-                value={ticketForm.ownerId}
+                value={ticketForm.ownerId || ""}
                 label="Owner"
                 onChange={handleTicketChange}
               >
-                {users.map((user) => (
-                  <MenuItem key={user.id} value={String(user.id)}>
-                    {user.name || user.fullName || user.email}
-                  </MenuItem>
-                ))}
+                {users.length === 0 ? (
+                  <MenuItem disabled>No project users found</MenuItem>
+                ) : (
+                  users.map((projectUser) => (
+                    <MenuItem
+                      key={projectUser.id}
+                      value={String(projectUser.id)}
+                    >
+                      {projectUser.name ||
+                        projectUser.fullName ||
+                        projectUser.email}
+                    </MenuItem>
+                  ))
+                )}
               </Select>
             </FormControl>
 
@@ -1363,7 +1404,7 @@ const Epics = () => {
 
               <Select
                 name="responsibleId"
-                value={ticketForm.responsibleId}
+                value={ticketForm.responsibleId || ""}
                 label="Responsible"
                 onChange={handleTicketChange}
               >

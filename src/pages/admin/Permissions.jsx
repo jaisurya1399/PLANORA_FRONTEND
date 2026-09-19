@@ -25,6 +25,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import {
   createPermission,
@@ -161,7 +162,7 @@ export default function Permissions() {
   };
 
   const handleDelete = async (permission) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Are you sure you want to delete "${permission.name}"?`,
     );
 

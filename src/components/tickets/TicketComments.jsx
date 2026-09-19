@@ -5,7 +5,6 @@ import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined
 import SendIcon from "@mui/icons-material/Send";
 import {
   Alert,
-  Avatar,
   Box,
   Button,
   Chip,
@@ -21,6 +20,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ticketApi, viewTicketAttachment } from "../../api/ticketApi";
@@ -173,7 +173,7 @@ export default function TicketComments({ ticketId }) {
     }
   }
   async function handleDeleteComment(id) {
-    if (!window.confirm("Delete this comment?")) return;
+    if (!(await requestConfirm("Delete this comment?"))) return;
     try {
       setSaving(true);
       await ticketApi.deleteComment(ticketId, id);
@@ -417,6 +417,7 @@ export default function TicketComments({ ticketId }) {
                             setEditingId(id);
                             setEditingText(text(item));
                           }}
+                          aria-label="Edit"
                         >
                           <EditIcon fontSize="small" />
                         </IconButton>
@@ -424,6 +425,7 @@ export default function TicketComments({ ticketId }) {
                           size="small"
                           color="error"
                           onClick={() => handleDeleteComment(id)}
+                          aria-label="Delete"
                         >
                           <DeleteIcon fontSize="small" />
                         </IconButton>
@@ -483,7 +485,7 @@ export default function TicketComments({ ticketId }) {
                       mt={1}
                     >
                       <Tooltip title="React">
-                        <IconButton size="small">
+                        <IconButton size="small" aria-label="Add reaction">
                           <EmojiEmotionsOutlinedIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>

@@ -2,12 +2,22 @@ import { createTheme } from "@mui/material/styles";
 
 import {
   BORDER,
+  BORDER_STRONG,
+  BUTTON_HOVER_SHADOW,
+  BUTTON_SHADOW,
   CANVAS_BACKGROUND,
   ELEVATION_SHADOW,
+  INPUT_HOVER_BORDER,
   MOTION,
   PRIMARY,
   PRIMARY_HOVER,
+  PRIMARY_LIGHT,
   RADIUS,
+  SCROLLBAR_THUMB,
+  SCROLLBAR_THUMB_HOVER,
+  SECONDARY,
+  SECONDARY_CONTRAST,
+  SELECTION_BACKGROUND,
   SEMANTIC_COLORS,
   SHADOW,
   SURFACE,
@@ -22,17 +32,18 @@ import {
 // MUI theme from them. Call this again after applyPalette() switches the
 // active mood theme — the imports above are live bindings, so by the time
 // this function runs it always sees the latest colors.
-export function buildTheme() {
+export function buildTheme(paletteKey) {
+  const mode = paletteKey === "darkModern" ? "dark" : "light";
   return createTheme({
     palette: {
-      mode: "light",
+      mode,
       primary: {
         main: PRIMARY,
         dark: PRIMARY_HOVER,
-        light: "#8B8DF0",
+        light: PRIMARY_LIGHT,
         contrastText: "#FFFFFF",
       },
-      secondary: { main: "#C8A15A", contrastText: "#17213D" },
+      secondary: { main: SECONDARY, contrastText: SECONDARY_CONTRAST },
       success: { main: SEMANTIC_COLORS.success.main },
       info: { main: SEMANTIC_COLORS.info.main },
       warning: { main: SEMANTIC_COLORS.warning.main },
@@ -102,15 +113,17 @@ export function buildTheme() {
             color: TEXT_PRIMARY,
             minWidth: 320,
           },
-          "::selection": { backgroundColor: "#BFDBFE" },
+          "::selection": { backgroundColor: SELECTION_BACKGROUND },
           "::-webkit-scrollbar": { width: 9, height: 9 },
           "::-webkit-scrollbar-thumb": {
-            background: "#B9C3D8",
+            background: SCROLLBAR_THUMB,
             borderRadius: 8,
             border: "2px solid transparent",
             backgroundClip: "padding-box",
           },
-          "::-webkit-scrollbar-thumb:hover": { background: "#8B96B0" },
+          "::-webkit-scrollbar-thumb:hover": {
+            background: SCROLLBAR_THUMB_HOVER,
+          },
           "::-webkit-scrollbar-track": { background: "transparent" },
           "*:focus-visible": {
             outline: `2px solid ${PRIMARY}`,
@@ -155,9 +168,9 @@ export function buildTheme() {
             "&:active": { transform: "translateY(1px) scale(0.99)" },
           },
           containedPrimary: {
-            boxShadow: "0 1px 2px rgba(29,78,216,.18)",
+            boxShadow: BUTTON_SHADOW,
             "&:hover": {
-              boxShadow: "0 6px 16px rgba(29,78,216,.24)",
+              boxShadow: BUTTON_HOVER_SHADOW,
               transform: "translateY(-1px)",
             },
             "&:active": { transform: "translateY(0) scale(0.99)" },
@@ -166,7 +179,7 @@ export function buildTheme() {
             borderColor: BORDER,
             backgroundColor: SURFACE,
             "&:hover": {
-              borderColor: "#A9B4C8",
+              borderColor: BORDER_STRONG,
               backgroundColor: SURFACE_SUBTLE,
             },
           },
@@ -191,7 +204,7 @@ export function buildTheme() {
           root: {
             borderRadius: RADIUS.input,
             "& fieldset": { borderColor: BORDER },
-            "&:hover fieldset": { borderColor: "#94A3B8" },
+            "&:hover fieldset": { borderColor: INPUT_HOVER_BORDER },
             "&.Mui-focused fieldset": { borderWidth: 1.5 },
           },
         },
@@ -269,7 +282,7 @@ export function buildTheme() {
         styleOverrides: {
           root: { borderColor: BORDER, padding: "13px 14px" },
           head: {
-            backgroundColor: "#F8F9FC",
+            backgroundColor: SURFACE_SUBTLE,
             color: TEXT_SECONDARY,
             fontWeight: 720,
             fontSize: "0.75rem",
@@ -283,7 +296,7 @@ export function buildTheme() {
           root: {
             transition: `background-color ${MOTION.fast} ${MOTION.easing}`,
             "&:last-child td": { borderBottom: 0 },
-            "&:hover": { backgroundColor: "#F8F9FC" },
+            "&:hover": { backgroundColor: SURFACE_SUBTLE },
           },
         },
       },

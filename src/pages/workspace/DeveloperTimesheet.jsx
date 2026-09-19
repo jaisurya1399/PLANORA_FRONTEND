@@ -128,7 +128,7 @@ export default function Timesheet() {
           Timesheet
         </Typography>
         <Typography sx={{ mt: 0.5, color: TEXT_SECONDARY, fontSize: 14 }}>
-          Track the time you spend working on projects and tasks.
+          Track the time you spend working on projects and tickets.
         </Typography>
       </Box>
 

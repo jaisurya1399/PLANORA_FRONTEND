@@ -13,7 +13,6 @@ import {
   Button,
   Card,
   CardContent,
-  CircularProgress,
   Grid,
   Stack,
   Typography,
@@ -27,6 +26,7 @@ import { getActiveProjects, getProjects } from "../../api/projectApi";
 import { getRoles } from "../../api/roleApi";
 import { getActiveTickets, getTickets } from "../../api/ticketApi";
 import { getUsers } from "../../api/userApi";
+import { PageLoadingSkeleton } from "../../components/common/LoadingSkeleton";
 import MetricCard from "../../components/common/MetricCard";
 import ProgressRing from "../../components/common/ProgressRing";
 import { useAuth } from "../../context/AuthContext";
@@ -88,12 +88,7 @@ function ProjectRoleDashboard() {
       .finally(() => setLoading(false));
   }, [projectId]);
 
-  if (loading)
-    return (
-      <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center" }}>
-        <CircularProgress size={28} />
-      </Box>
-    );
+  if (loading) return <PageLoadingSkeleton />;
   if (!projectId)
     return <Alert severity="warning">Select a project to continue.</Alert>;
 
@@ -268,12 +263,7 @@ function SystemAdminDashboard() {
     [data],
   );
 
-  if (loading)
-    return (
-      <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center" }}>
-        <CircularProgress size={28} />
-      </Box>
-    );
+  if (loading) return <PageLoadingSkeleton />;
 
   return (
     <Box className="app-page pm-fade-up">

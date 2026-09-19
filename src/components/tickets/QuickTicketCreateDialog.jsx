@@ -66,7 +66,7 @@ export default function QuickTicketCreateDialog({
   };
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Quick Create Issue</DialogTitle>
+      <DialogTitle>Quick Create Ticket</DialogTitle>
       <DialogContent>
         <Stack spacing={2} mt={1}>
           <TextField
@@ -84,7 +84,7 @@ export default function QuickTicketCreateDialog({
           />
           <TextField
             select
-            label="Issue Type"
+            label="Ticket Type"
             value={f.typeId}
             onChange={(e) => setF({ ...f, typeId: e.target.value })}
           >

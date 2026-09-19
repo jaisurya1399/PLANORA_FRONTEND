@@ -447,6 +447,7 @@ export default function ProjectStatus() {
                 border: "1px solid",
                 borderColor: "divider",
               }}
+              aria-label="Refresh"
             >
               <Refresh />
             </IconButton>
@@ -685,6 +686,7 @@ export default function ProjectStatus() {
                                     restoringId === status.id ||
                                     permanentDeletingId === status.id
                                   }
+                                  aria-label="Restore"
                                 >
                                   {restoringId === status.id ? (
                                     <CircularProgress size={20} />
@@ -706,6 +708,7 @@ export default function ProjectStatus() {
                                     restoringId === status.id ||
                                     permanentDeletingId === status.id
                                   }
+                                  aria-label="Delete"
                                 >
                                   {permanentDeletingId === status.id ? (
                                     <CircularProgress size={20} />
@@ -728,6 +731,7 @@ export default function ProjectStatus() {
                               <IconButton
                                 color="primary"
                                 onClick={() => handleEdit(status)}
+                                aria-label="Edit"
                               >
                                 <Edit />
                               </IconButton>
@@ -739,6 +743,7 @@ export default function ProjectStatus() {
                                   color="error"
                                   onClick={() => handleDeleteClick(status)}
                                   disabled={deletingId === status.id}
+                                  aria-label="Delete"
                                 >
                                   {deletingId === status.id ? (
                                     <CircularProgress size={20} />
@@ -777,7 +782,11 @@ export default function ProjectStatus() {
         >
           {editingStatus ? "Edit Project Status" : "Add Project Status"}
 
-          <IconButton onClick={handleCloseDialog} disabled={saving}>
+          <IconButton
+            onClick={handleCloseDialog}
+            disabled={saving}
+            aria-label="Close"
+          >
             <Close />
           </IconButton>
         </DialogTitle>

@@ -524,7 +524,7 @@ const EpicAnalyticsDialog = ({ open, onClose, epic }) => {
               flexWrap="wrap"
             >
               <StatCard
-                label="Total Issues"
+                label="Total Tickets"
                 value={number(effectiveProgress.totalIssues)}
               />
               <StatCard
@@ -550,7 +550,7 @@ const EpicAnalyticsDialog = ({ open, onClose, epic }) => {
 
             <Paper variant="outlined" sx={{ p: 2.5 }}>
               <Stack direction="row" justifyContent="space-between" mb={1}>
-                <Typography fontWeight={700}>Issue Completion</Typography>
+                <Typography fontWeight={700}>Ticket Completion</Typography>
                 <Typography fontWeight={700}>
                   {pct(effectiveProgress.completionPercentage)}
                 </Typography>
@@ -622,7 +622,7 @@ const EpicAnalyticsDialog = ({ open, onClose, epic }) => {
               spacing={2}
               flexWrap="wrap"
             >
-              <StatCard label="Issues" value={number(report.totalIssues)} />
+              <StatCard label="Tickets" value={number(report.totalIssues)} />
               <StatCard
                 label="Completed"
                 value={number(report.completedIssues)}

@@ -31,6 +31,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import {
   BugReport,
@@ -441,7 +442,7 @@ export default function TicketTypes() {
    */
 
   const handleDelete = async (ticketType) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Are you sure you want to delete "${ticketType.name}"?`,
     );
 
@@ -557,7 +558,11 @@ export default function TicketTypes() {
           }}
         >
           <Tooltip title="Refresh">
-            <IconButton onClick={loadTicketTypes} disabled={loading}>
+            <IconButton
+              onClick={loadTicketTypes}
+              disabled={loading}
+              aria-label="Refresh"
+            >
               <Refresh />
             </IconButton>
           </Tooltip>
@@ -788,6 +793,7 @@ export default function TicketTypes() {
                                   <IconButton
                                     color="primary"
                                     onClick={() => openEditDialog(ticketType)}
+                                    aria-label="Edit"
                                   >
                                     <Edit />
                                   </IconButton>
@@ -797,6 +803,7 @@ export default function TicketTypes() {
                                   <IconButton
                                     color="error"
                                     onClick={() => handleDelete(ticketType)}
+                                    aria-label="Delete"
                                   >
                                     <Delete />
                                   </IconButton>
@@ -807,6 +814,7 @@ export default function TicketTypes() {
                                 <IconButton
                                   color="success"
                                   onClick={() => handleRestore(ticketType)}
+                                  aria-label="Restore"
                                 >
                                   <Restore />
                                 </IconButton>

@@ -135,7 +135,7 @@ export default function WorkflowConfiguration() {
             </TextField>
             <TextField
               select
-              label="Issue Type"
+              label="Ticket Type"
               value={form.ticketTypeId}
               onChange={(e) =>
                 setForm({ ...form, ticketTypeId: e.target.value })

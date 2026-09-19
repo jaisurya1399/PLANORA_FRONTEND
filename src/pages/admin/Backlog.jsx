@@ -40,6 +40,7 @@ import {
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 import QuickTicketCreateDialog from "../../components/tickets/QuickTicketCreateDialog";
 import SprintAnalyticsDialog from "./SprintAnalyticsDialog";
 
@@ -846,7 +847,7 @@ function SprintSection({
           flexWrap: "wrap",
         }}
       >
-        <IconButton size="small" onClick={onToggle}>
+        <IconButton size="small" onClick={onToggle} aria-label="Expand">
           {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </IconButton>
 
@@ -895,7 +896,12 @@ function SprintSection({
         <Stack direction="row" spacing={0.5}>
           {sprint.status === "PLANNED" && (
             <Tooltip title="Start sprint">
-              <IconButton size="small" color="success" onClick={onStart}>
+              <IconButton
+                size="small"
+                color="success"
+                onClick={onStart}
+                aria-label="Start"
+              >
                 <PlayArrowIcon fontSize="small" />
               </IconButton>
             </Tooltip>
@@ -904,19 +910,32 @@ function SprintSection({
           {sprint.status === "ACTIVE" && (
             <>
               <Tooltip title="View burndown">
-                <IconButton size="small" onClick={onViewBurndown}>
+                <IconButton
+                  size="small"
+                  onClick={onViewBurndown}
+                  aria-label="View burndown"
+                >
                   <ShowChartIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
 
               <Tooltip title="Sprint analytics">
-                <IconButton size="small" onClick={onViewAnalytics}>
+                <IconButton
+                  size="small"
+                  onClick={onViewAnalytics}
+                  aria-label="View analytics"
+                >
                   <AssessmentIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
 
               <Tooltip title="Complete sprint">
-                <IconButton size="small" color="primary" onClick={onComplete}>
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={onComplete}
+                  aria-label="Complete sprint"
+                >
                   <StopCircleIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
@@ -924,13 +943,18 @@ function SprintSection({
           )}
 
           <Tooltip title="Edit sprint">
-            <IconButton size="small" onClick={onEdit}>
+            <IconButton size="small" onClick={onEdit} aria-label="Edit">
               <EditIcon fontSize="small" />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Delete sprint">
-            <IconButton size="small" color="error" onClick={onDelete}>
+            <IconButton
+              size="small"
+              color="error"
+              onClick={onDelete}
+              aria-label="Delete"
+            >
               <DeleteIcon fontSize="small" />
             </IconButton>
           </Tooltip>
@@ -1261,7 +1285,7 @@ export default function Backlog() {
   };
 
   const handleDeleteSprint = async (sprint) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Delete sprint "${sprint.name}"? Tickets in it will return to the backlog.`,
     );
 
@@ -1331,7 +1355,7 @@ export default function Backlog() {
   };
 
   const completeSprintDirect = async (sprint) => {
-    const confirmed = window.confirm(`Complete sprint "${sprint.name}"?`);
+    const confirmed = await requestConfirm(`Complete sprint "${sprint.name}"?`);
     if (!confirmed) return;
 
     try {
@@ -1579,7 +1603,7 @@ export default function Backlog() {
             onClick={() => setQuickCreateOpen(true)}
             disabled={!selectedProjectId}
           >
-            Quick issue
+            Quick ticket
           </Button>
           <Button
             variant="contained"
@@ -1724,6 +1748,7 @@ export default function Backlog() {
               <IconButton
                 size="small"
                 onClick={() => setBacklogExpanded((prev) => !prev)}
+                aria-label="Expand"
               >
                 {backlogExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </IconButton>
@@ -1830,6 +1855,7 @@ export default function Backlog() {
                 <IconButton
                   size="small"
                   onClick={() => setPastExpanded((prev) => !prev)}
+                  aria-label="Expand"
                 >
                   {pastExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </IconButton>
@@ -1890,6 +1916,7 @@ export default function Backlog() {
                           <IconButton
                             size="small"
                             onClick={() => setBurndownSprint(sprint)}
+                            aria-label="View burndown"
                           >
                             <ShowChartIcon fontSize="small" />
                           </IconButton>
@@ -1899,6 +1926,7 @@ export default function Backlog() {
                           <IconButton
                             size="small"
                             onClick={() => setAnalyticsSprint(sprint)}
+                            aria-label="View analytics"
                           >
                             <AssessmentIcon fontSize="small" />
                           </IconButton>
@@ -1909,6 +1937,7 @@ export default function Backlog() {
                             size="small"
                             color="error"
                             onClick={() => handleDeleteSprint(sprint)}
+                            aria-label="Delete"
                           >
                             <DeleteIcon fontSize="small" />
                           </IconButton>

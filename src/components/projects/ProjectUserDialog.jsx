@@ -26,7 +26,7 @@ import MemberAvatar from "../common/MemberAvatar";
 const ACCESS_LEVELS = [
   {
     value: "PROJECT_ADMIN",
-    label: "Project Admin",
+    label: "Project Administrator",
     description:
       "Manage this project's configuration, members and delivery settings.",
   },
@@ -316,7 +316,7 @@ export default function ProjectUserDialog({
           onClick={handleSave}
           disabled={loadingUsers || !form.userId || !form.role || false}
         >
-          {assignment ? "Save Changes" : "Add Member"}
+          {assignment ? "Save Changes" : "Add Project Member"}
         </Button>
       </DialogActions>
     </Dialog>

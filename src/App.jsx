@@ -107,7 +107,7 @@ const CommunicationHub = lazy(() => import("./pages/chat/CommunicationHub"));
 // ============================================================
 const DeveloperDashboard = lazy(() => import("./pages/workspace/Dashboard"));
 const MyProjects = lazy(() => import("./pages/workspace/MyProjects"));
-const DeveloperMyTasks = lazy(() => import("./pages/workspace/MyTasks"));
+const DeveloperMyTickets = lazy(() => import("./pages/workspace/MyTickets"));
 const DeveloperBoard = lazy(() => import("./pages/workspace/DeveloperBoard"));
 const DeveloperDailyScrum = lazy(
   () => import("./pages/workspace/DeveloperDailyScrum"),
@@ -214,7 +214,7 @@ function LegacyRoleRedirect() {
   return <Navigate to={`/member/${rolePath}${suffix}`} replace />;
 }
 
-/** Project operational routes shared by Project Admin and Team Lead. */
+/** Project operational routes shared by Project Administrator and Team Lead. */
 function ProjectManagementRoutes({ scope = "project" }) {
   const isProjectAdmin = scope === "project";
   const canConfigure = isProjectAdmin;
@@ -521,10 +521,10 @@ function DeveloperRouteChildren() {
         <Route index element={<ProjectDetails />} />
       </Route>
       <Route
-        path="tasks"
+        path="tickets"
         element={<ProtectedRoute allowedProjectRoles={["DEVELOPER"]} />}
       >
-        <Route index element={<DeveloperMyTasks />} />
+        <Route index element={<DeveloperMyTickets />} />
       </Route>
       <Route
         path="board"
@@ -674,7 +674,7 @@ export default function App() {
               </Route>
             </Route>
 
-            {/* Ticket details opened from My Tasks can belong to any project
+            {/* Ticket details opened from My Tickets can belong to any project
                 visible to the developer. Do not guard this route by the
                 currently selected project's role, otherwise React Router
                 redirects to /member before TicketDetails can load the ticket. */}

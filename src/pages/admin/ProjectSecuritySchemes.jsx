@@ -11,12 +11,12 @@ import {
 import { useEffect, useState } from "react";
 import { getActiveProjects } from "../../api/projectApi";
 import {
-  getIssueSecurityScheme,
   getPermissionScheme,
   getPriorityScheme,
-  saveIssueSecurityScheme,
+  getTicketSecurityScheme,
   savePermissionScheme,
   savePriorityScheme,
+  saveTicketSecurityScheme,
 } from "../../api/projectSchemeApi";
 export default function ProjectSecuritySchemes() {
   const [p, setP] = useState([]),
@@ -32,7 +32,7 @@ export default function ProjectSecuritySchemes() {
         '{"PROJECT_ADMIN":["*"] ,"MEMBER":["ticket.view","ticket.update"] ,"VIEWER":["project.view","ticket.view"]}',
     }),
     [security, setSecurity] = useState({
-      name: "Default Issue Security",
+      name: "Default Ticket Security",
       defaultLevel: "PROJECT",
     });
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function ProjectSecuritySchemes() {
     Promise.all([
       getPriorityScheme(pid),
       getPermissionScheme(pid),
-      getIssueSecurityScheme(pid),
+      getTicketSecurityScheme(pid),
     ])
       .then(([a, b, c]) => {
         setPriority(a);
@@ -64,7 +64,7 @@ export default function ProjectSecuritySchemes() {
   return (
     <Box className="app-page pm-fade-up">
       <Typography variant="h5" mb={2}>
-        Project Permission / Priority / Issue Security Schemes
+        Project Security & Access Schemes
       </Typography>
       <TextField
         select
@@ -151,7 +151,7 @@ export default function ProjectSecuritySchemes() {
           <Stack direction="row" spacing={2}>
             <TextField
               fullWidth
-              label="Issue security scheme name"
+              label="Ticket security scheme name"
               value={security.name || ""}
               onChange={(e) =>
                 setSecurity({ ...security, name: e.target.value })
@@ -175,7 +175,7 @@ export default function ProjectSecuritySchemes() {
             <Button
               variant="contained"
               onClick={() =>
-                saveIssueSecurityScheme({
+                saveTicketSecurityScheme({
                   projectId: Number(pid),
                   name: security.name,
                   defaultLevel: security.defaultLevel,

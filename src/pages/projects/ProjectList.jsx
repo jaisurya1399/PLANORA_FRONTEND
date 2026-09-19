@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 import ProjectTable from "../../components/projects/ProjectTable";
 
 import { useLocation, useNavigate } from "react-router-dom";
@@ -51,7 +52,7 @@ export default function ProjectList() {
   }, []);
 
   const handleDelete = async (project) => {
-    const confirmed = window.confirm(`Delete project "${project.name}"?`);
+    const confirmed = await requestConfirm(`Delete project "${project.name}"?`);
 
     if (!confirmed) {
       return;

@@ -28,6 +28,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import {
   createRole,
@@ -270,7 +271,7 @@ export default function Roles() {
   // ============================================================
 
   const handleDelete = async (id) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       "Are you sure you want to delete this role?",
     );
 

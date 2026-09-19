@@ -29,6 +29,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import {
   createTicketStatus,
@@ -163,7 +164,7 @@ export default function TicketStatus() {
   };
 
   const handleDelete = async (status) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Are you sure you want to delete "${status.name}"?`,
     );
 
@@ -233,7 +234,7 @@ export default function TicketStatus() {
 
         <Box sx={{ display: "flex", gap: 1 }}>
           <Tooltip title="Refresh">
-            <IconButton onClick={loadStatuses}>
+            <IconButton onClick={loadStatuses} aria-label="Refresh">
               <Refresh />
             </IconButton>
           </Tooltip>
@@ -402,6 +403,7 @@ export default function TicketStatus() {
                                   <IconButton
                                     color="primary"
                                     onClick={() => openEditDialog(status)}
+                                    aria-label="Edit"
                                   >
                                     <Edit />
                                   </IconButton>
@@ -411,6 +413,7 @@ export default function TicketStatus() {
                                   <IconButton
                                     color="error"
                                     onClick={() => handleDelete(status)}
+                                    aria-label="Delete"
                                   >
                                     <Delete />
                                   </IconButton>
@@ -421,6 +424,7 @@ export default function TicketStatus() {
                                 <IconButton
                                   color="success"
                                   onClick={() => handleRestore(status)}
+                                  aria-label="Restore"
                                 >
                                   <Restore />
                                 </IconButton>

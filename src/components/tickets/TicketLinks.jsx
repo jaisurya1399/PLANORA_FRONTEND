@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import { getTicketById, searchTickets } from "../../api/ticketApi";
 import {
@@ -286,7 +287,7 @@ export default function TicketLinks({
   // ==========================================================
 
   async function handleDeleteLink(rowId) {
-    const confirmed = window.confirm("Remove this link?");
+    const confirmed = await requestConfirm("Remove this link?");
 
     if (!confirmed) return;
 

@@ -28,6 +28,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -149,7 +150,7 @@ export default function Releases() {
     }
   };
   const remove = async (r) => {
-    if (!window.confirm(`Delete ${r.version}?`)) return;
+    if (!(await requestConfirm(`Delete ${r.version}?`))) return;
     try {
       await deleteRelease(projectId, r.id);
       if (selected?.id === r.id) setSelected(null);
@@ -310,13 +311,18 @@ export default function Releases() {
                     >
                       Analytics
                     </Button>
-                    <IconButton size="small" onClick={() => openEdit(r)}>
+                    <IconButton
+                      size="small"
+                      onClick={() => openEdit(r)}
+                      aria-label="Edit"
+                    >
                       <Edit />
                     </IconButton>
                     <IconButton
                       size="small"
                       color="error"
                       onClick={() => remove(r)}
+                      aria-label="Delete"
                     >
                       <Delete />
                     </IconButton>
@@ -349,6 +355,7 @@ export default function Releases() {
             <IconButton
               onClick={() => setSelected(null)}
               sx={{ position: "absolute", right: 8, top: 8 }}
+              aria-label="Close"
             >
               <Close />
             </IconButton>

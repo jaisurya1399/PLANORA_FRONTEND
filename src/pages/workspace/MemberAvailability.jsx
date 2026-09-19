@@ -31,6 +31,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 import MemberAvatar from "../../components/common/MemberAvatar";
 
 import {
@@ -506,7 +507,7 @@ export default function MemberAvailability() {
 
   const remove = async (entry) => {
     if (
-      !window.confirm(
+      !requestConfirm(
         `Delete ${TYPE_META[entry.availabilityType]?.label || "availability"} for ${formatDate(entry.availabilityDate)}?`,
       )
     )
@@ -937,6 +938,7 @@ export default function MemberAvailability() {
                       new Date(value.getFullYear(), value.getMonth() - 1, 1),
                   )
                 }
+                aria-label="Previous"
               >
                 <ChevronLeftIcon />
               </IconButton>
@@ -953,6 +955,7 @@ export default function MemberAvailability() {
                       new Date(value.getFullYear(), value.getMonth() + 1, 1),
                   )
                 }
+                aria-label="Next"
               >
                 <ChevronRightIcon />
               </IconButton>
@@ -1058,6 +1061,7 @@ export default function MemberAvailability() {
                                 <IconButton
                                   size="small"
                                   onClick={() => openCreate(key)}
+                                  aria-label="Add"
                                 >
                                   <AddIcon fontSize="inherit" />
                                 </IconButton>

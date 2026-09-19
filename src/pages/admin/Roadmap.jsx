@@ -666,6 +666,7 @@ export default function Roadmap() {
                             : "rotate(-90deg)",
                           transition: "transform 0.2s",
                         }}
+                        aria-label="Expand"
                       >
                         <ExpandMoreIcon />
                       </IconButton>
@@ -756,7 +757,7 @@ export default function Roadmap() {
                               variant="caption"
                               color="text.secondary"
                             >
-                              Project Users
+                              Project Members
                             </Typography>
 
                             <Typography fontWeight={600}>

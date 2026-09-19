@@ -37,6 +37,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 import TicketLinks from "../../components/tickets/TicketLinks";
 import TicketWatchers from "../../components/tickets/TicketWatchers";
 
@@ -589,7 +590,7 @@ export default function TicketDetails() {
   const handleDeleteComment = async (commentId) => {
     if (!commentId) return;
 
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       "Are you sure you want to delete this comment?",
     );
 
@@ -748,7 +749,7 @@ export default function TicketDetails() {
   const handleDeleteTime = async (timeId) => {
     if (!timeId) return;
 
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       "Are you sure you want to delete this time log?",
     );
 
@@ -822,7 +823,7 @@ export default function TicketDetails() {
   const handleDeleteAttachment = async (attachmentId) => {
     if (!attachmentId) return;
 
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       "Are you sure you want to delete this attachment?",
     );
 
@@ -1365,19 +1366,19 @@ export default function TicketDetails() {
                         flexWrap: "wrap",
                       }}
                     >
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Bold">
                         <FormatBoldIcon fontSize="small" />
                       </IconButton>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Italic">
                         <FormatItalicIcon fontSize="small" />
                       </IconButton>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Strikethrough">
                         <StrikethroughSIcon fontSize="small" />
                       </IconButton>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Add link">
                         <LinkIcon fontSize="small" />
                       </IconButton>
 
@@ -1413,33 +1414,33 @@ export default function TicketDetails() {
                         Subheading
                       </Button>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Quote">
                         <FormatQuoteIcon fontSize="small" />
                       </IconButton>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Code block">
                         <CodeIcon fontSize="small" />
                       </IconButton>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Bulleted list">
                         <FormatListBulletedIcon fontSize="small" />
                       </IconButton>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Numbered list">
                         <FormatListNumberedIcon fontSize="small" />
                       </IconButton>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Insert image">
                         <ImageIcon fontSize="small" />
                       </IconButton>
 
                       <Box sx={{ flex: 1 }} />
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Undo">
                         <UndoIcon fontSize="small" />
                       </IconButton>
 
-                      <IconButton size="small">
+                      <IconButton size="small" aria-label="Redo">
                         <RedoIcon fontSize="small" />
                       </IconButton>
                     </Box>
@@ -1653,6 +1654,7 @@ export default function TicketDetails() {
                                           color: "#f44336",
                                         },
                                       }}
+                                      aria-label="Delete"
                                     >
                                       {deletingId === commentId ? (
                                         <CircularProgress size={16} />

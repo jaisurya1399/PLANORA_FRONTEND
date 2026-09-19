@@ -3,7 +3,7 @@
    ============================================================ */
 * {
   box-sizing: border-box;
-}s
+}
 html,
 body,
 #root {
@@ -54,6 +54,7 @@ svg {
    updates instantly with no extra CSS needed per theme.
    ============================================================ */
 :root {
+  color-scheme: light;
   --pm-primary: #5b5ce2;
   --pm-primary-hover: #4748c9;
   --pm-primary-soft: rgba(91, 92, 226, 0.1);
@@ -98,11 +99,7 @@ svg {
 
 /* Ambient page glow — subtle, theme-tinted radial washes behind content. */
 body {
-  background:
-    radial-gradient(circle at 0% 0%, var(--pm-page-glow-1), transparent 24%),
-    radial-gradient(circle at 100% 0%, var(--pm-page-glow-2), transparent 22%),
-    radial-gradient(circle at 80% 100%, var(--pm-page-glow-3), transparent 24%),
-    var(--pm-page);
+  background: var(--pm-page);
 }
 
 /* ============================================================
@@ -117,16 +114,7 @@ body {
   animation: pm-fade-up 220ms ease-out both;
 }
 .app-page::after {
-  content: "";
-  position: fixed;
-  width: 420px;
-  height: 420px;
-  right: -260px;
-  bottom: -260px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--pm-page-glow-1), transparent 68%);
-  pointer-events: none;
-  z-index: 0;
+  content: none;
 }
 .page-header {
   position: relative;
@@ -168,7 +156,6 @@ body {
 .section-card:hover,
 .pm-surface:hover {
   border-color: var(--pm-border-hover);
-  box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
 }
 .page-section {
   margin-top: 24px;
@@ -237,6 +224,52 @@ body {
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.025);
   backdrop-filter: blur(14px);
 }
+/* Enterprise control language: primary actions always inherit the selected palette. */
+.MuiButton-containedPrimary {
+  color: #fff !important;
+  background: var(--pm-primary) !important;
+  border: 1px solid var(--pm-primary) !important;
+  box-shadow: 0 2px 8px var(--pm-primary-soft) !important;
+}
+.MuiButton-containedPrimary:hover {
+  background: var(--pm-primary-hover) !important;
+  border-color: var(--pm-primary-hover) !important;
+  box-shadow: 0 6px 16px var(--pm-primary-soft) !important;
+}
+.MuiButton-containedPrimary.Mui-disabled {
+  color: rgba(255, 255, 255, 0.78) !important;
+  background: color-mix(
+    in srgb,
+    var(--pm-primary) 48%,
+    var(--pm-border)
+  ) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+.MuiButton-outlinedPrimary {
+  color: var(--pm-primary) !important;
+  border-color: var(--pm-primary) !important;
+}
+.MuiButton-outlinedPrimary:hover {
+  background: var(--pm-primary-soft) !important;
+}
+.pm-page-toolbar {
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+}
+.pm-table-scroll {
+  border: 1px solid var(--pm-border);
+  border-radius: 14px;
+  background: var(--pm-surface-solid);
+}
+@media (max-width: 900px) {
+  .page-header {
+    flex-wrap: wrap;
+  }
+  .page-header > *:last-child {
+    width: 100%;
+  }
+}
+
 @media (max-width: 700px) {
   .pm-page-toolbar {
     flex-direction: column;
@@ -573,4 +606,234 @@ body {
   min-height: 48px;
   height: 48px;
   border-radius: 12px;
+}
+
+/* Enterprise responsive safeguards */
+.MuiTableContainer-root,
+.responsive-table,
+.pm-table-scroll {
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 1199px) {
+  .app-page {
+    padding-inline: 16px;
+  }
+  .page-header {
+    gap: 14px;
+  }
+}
+@media (max-width: 767px) {
+  .app-page {
+    padding-inline: 12px;
+    padding-bottom: 28px;
+  }
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .page-header > :last-child {
+    width: 100%;
+  }
+}
+@media (max-width: 599px) {
+  .MuiDialog-paper {
+    margin: 12px !important;
+    width: calc(100% - 24px) !important;
+  }
+  .MuiTable-root {
+    font-size: 0.8125rem;
+  }
+  .MuiTableCell-root {
+    padding-inline: 10px;
+  }
+}
+
+:root[data-theme="darkModern"] {
+  color-scheme: dark;
+}
+:root[data-theme="elevatedLight"],
+:root[data-theme="minimalLuxury"] {
+  color-scheme: light;
+}
+
+/* ============================================================
+   ENTERPRISE P2 POLISH
+   ============================================================ */
+:root {
+  --pm-focus-ring: 0 0 0 3px
+    color-mix(in srgb, var(--pm-primary) 24%, transparent);
+  --pm-control-min-size: 40px;
+}
+
+/* Keep operational surfaces calm: cards should not behave like marketing tiles. */
+.section-card:hover,
+.pm-surface:hover {
+  border-color: var(--pm-border-hover);
+  box-shadow: 0 4px 16px rgba(16, 24, 40, 0.055);
+}
+
+.pm-hover-lift:hover {
+  transform: none;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+}
+
+/*
+   Theme-aware enterprise buttons.
+   IMPORTANT: do not only remove the old gradient here. The previous rule
+   left the gradient's transparent background-color behind, which made
+   contained buttons render as white/transparent with white text. Every
+   palette now supplies a visible primary surface through --pm-primary.
+*/
+.MuiButton-containedPrimary {
+  background: var(--pm-primary) !important;
+  background-image: none !important;
+  color: #fff !important;
+  border: 1px solid var(--pm-primary) !important;
+  box-shadow: 0 5px 14px var(--pm-primary-soft) !important;
+}
+.MuiButton-containedPrimary:hover:not(.Mui-disabled) {
+  background: var(--pm-primary-hover) !important;
+  background-image: none !important;
+  color: #fff !important;
+  border-color: var(--pm-primary-hover) !important;
+  box-shadow: 0 8px 20px var(--pm-primary-soft) !important;
+}
+.MuiButton-containedPrimary.Mui-disabled {
+  background: color-mix(
+    in srgb,
+    var(--pm-primary) 24%,
+    var(--pm-surface-solid)
+  ) !important;
+  background-image: none !important;
+  color: color-mix(
+    in srgb,
+    var(--pm-ink) 48%,
+    var(--pm-surface-solid)
+  ) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--pm-primary) 18%,
+    var(--pm-border)
+  ) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* Keep all contained actions theme-aware, including buttons that use the
+   default `contained` variant without an explicit color prop. */
+.MuiButton-contained:not(.MuiButton-containedPrimary):not(
+    .MuiButton-containedError
+  ) {
+  background: var(--pm-primary) !important;
+  color: #fff !important;
+  border: 1px solid var(--pm-primary) !important;
+  box-shadow: 0 5px 14px var(--pm-primary-soft) !important;
+}
+.MuiButton-contained:not(.MuiButton-containedPrimary):not(
+    .MuiButton-containedError
+  ):hover:not(.Mui-disabled) {
+  background: var(--pm-primary-hover) !important;
+  color: #fff !important;
+  border-color: var(--pm-primary-hover) !important;
+}
+.MuiButton-contained:not(.MuiButton-containedPrimary):not(
+    .MuiButton-containedError
+  ).Mui-disabled {
+  background: color-mix(
+    in srgb,
+    var(--pm-primary) 24%,
+    var(--pm-surface-solid)
+  ) !important;
+  color: color-mix(
+    in srgb,
+    var(--pm-ink) 48%,
+    var(--pm-surface-solid)
+  ) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--pm-primary) 18%,
+    var(--pm-border)
+  ) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* Keep normal UI text readable at browser zoom levels. */
+.MuiTypography-caption,
+.MuiTableCell-head,
+.MuiInputLabel-root,
+.MuiFormHelperText-root {
+  font-size: max(0.75rem, 1em);
+}
+
+/* Consistent keyboard focus treatment. */
+:where(
+  button,
+  a,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  [tabindex]
+):focus-visible {
+  outline: none;
+  box-shadow: var(--pm-focus-ring);
+}
+
+/* Dense tables should scroll intentionally rather than squeeze columns into unreadability. */
+.pm-table-scroll {
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+}
+
+.pm-table-scroll > table,
+.data-grid {
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Respect reduced motion beyond the existing component-level handling. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .page-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .pm-page-toolbar {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-page {
+    padding: 8px 12px 28px;
+  }
+
+  .page-header {
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+
+  .section-card,
+  .pm-surface {
+    border-radius: 12px;
+  }
+
+  .MuiDialog-paper {
+    margin: 8px !important;
+    width: calc(100% - 16px) !important;
+  }
 }

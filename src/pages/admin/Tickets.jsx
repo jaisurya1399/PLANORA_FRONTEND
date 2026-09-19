@@ -41,6 +41,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 import { useAuth } from "../../context/AuthContext";
 
 import {
@@ -878,7 +879,7 @@ export default function Tickets() {
   };
 
   const handleDelete = async (ticket) => {
-    const confirmed = window.confirm(`Delete ticket "${ticket.name}"?`);
+    const confirmed = await requestConfirm(`Delete ticket "${ticket.name}"?`);
 
     if (!confirmed) return;
 
@@ -1005,7 +1006,7 @@ export default function Tickets() {
   };
 
   const deleteCommentHandler = async (commentId) => {
-    const confirmed = window.confirm("Delete this comment?");
+    const confirmed = await requestConfirm("Delete this comment?");
 
     if (!confirmed) return;
 
@@ -1086,7 +1087,7 @@ export default function Tickets() {
       return;
     }
 
-    const confirmed = window.confirm("Delete this ticket relation?");
+    const confirmed = await requestConfirm("Delete this ticket relation?");
 
     if (!confirmed) return;
 
@@ -1577,6 +1578,7 @@ export default function Tickets() {
                       <IconButton
                         size="small"
                         onClick={(event) => handleUpdateView(view, event)}
+                        aria-label="Save"
                       >
                         <SaveIcon fontSize="small" />
                       </IconButton>
@@ -1587,6 +1589,7 @@ export default function Tickets() {
                         size="small"
                         color="error"
                         onClick={(event) => handleDeleteView(view, event)}
+                        aria-label="Delete"
                       >
                         <DeleteIcon fontSize="small" />
                       </IconButton>
@@ -1855,7 +1858,11 @@ export default function Tickets() {
             </Typography>
           </Box>
 
-          <IconButton onClick={closeDialog} disabled={saving}>
+          <IconButton
+            onClick={closeDialog}
+            disabled={saving}
+            aria-label="Close"
+          >
             <CloseIcon />
           </IconButton>
         </Box>
@@ -2179,7 +2186,7 @@ export default function Tickets() {
             </Typography>
           </Box>
 
-          <IconButton onClick={() => setDetailOpen(false)}>
+          <IconButton onClick={() => setDetailOpen(false)} aria-label="Close">
             <CloseIcon />
           </IconButton>
         </Box>
@@ -2413,6 +2420,7 @@ export default function Tickets() {
                                     setEditingCommentId(id);
                                     setEditingCommentText(text);
                                   }}
+                                  aria-label="Edit"
                                 >
                                   <EditIcon fontSize="small" />
                                 </IconButton>
@@ -2421,6 +2429,7 @@ export default function Tickets() {
                                   size="small"
                                   color="error"
                                   onClick={() => deleteCommentHandler(id)}
+                                  aria-label="Delete"
                                 >
                                   <DeleteIcon fontSize="small" />
                                 </IconButton>
@@ -2707,6 +2716,7 @@ export default function Tickets() {
                         <IconButton
                           color="error"
                           onClick={() => removeAttachment(index)}
+                          aria-label="Delete"
                         >
                           <DeleteIcon />
                         </IconButton>

@@ -28,6 +28,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import { useEffect, useState } from "react";
 
@@ -168,7 +169,7 @@ export default function Activities() {
   };
 
   const handleDelete = async (activity) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Are you sure you want to delete "${activity.name}"?`,
     );
 
@@ -238,7 +239,7 @@ export default function Activities() {
 
         <Box sx={{ display: "flex", gap: 1 }}>
           <Tooltip title="Refresh">
-            <IconButton onClick={loadActivities}>
+            <IconButton onClick={loadActivities} aria-label="Refresh">
               <Refresh />
             </IconButton>
           </Tooltip>
@@ -380,6 +381,7 @@ export default function Activities() {
                                   <IconButton
                                     color="primary"
                                     onClick={() => handleOpenEdit(activity)}
+                                    aria-label="Edit"
                                   >
                                     <Edit />
                                   </IconButton>
@@ -389,6 +391,7 @@ export default function Activities() {
                                   <IconButton
                                     color="error"
                                     onClick={() => handleDelete(activity)}
+                                    aria-label="Delete"
                                   >
                                     <Delete />
                                   </IconButton>
@@ -399,6 +402,7 @@ export default function Activities() {
                                 <IconButton
                                   color="success"
                                   onClick={() => handleRestore(activity)}
+                                  aria-label="Restore"
                                 >
                                   <Restore />
                                 </IconButton>

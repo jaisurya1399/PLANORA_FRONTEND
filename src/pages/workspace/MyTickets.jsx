@@ -16,43 +16,43 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-  getMyResolvedTasks,
-  getMyTasks,
-  getMyTasksAll,
+  getMyResolvedTickets,
+  getMyTickets,
+  getMyTicketsAll,
 } from "../../api/ticketApi";
 
-export default function MyTasks() {
+export default function MyTickets() {
   const navigate = useNavigate();
 
-  const [tasks, setTasks] = useState([]);
+  const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState("active");
   const [error, setError] = useState("");
 
   // ============================================================
-  // LOAD MY TASKS
+  // LOAD MY TICKETS
   // ============================================================
 
-  const loadTasks = async () => {
+  const loadTickets = async () => {
     try {
       setLoading(true);
       setError("");
 
       const data =
         view === "all"
-          ? await getMyTasksAll()
+          ? await getMyTicketsAll()
           : view === "resolved"
-            ? await getMyResolvedTasks()
-            : await getMyTasks();
+            ? await getMyResolvedTickets()
+            : await getMyTickets();
 
-      setTasks(Array.isArray(data) ? data : []);
+      setTickets(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error("MY TASKS API ERROR:", err);
+      console.error("MY TICKETS API ERROR:", err);
 
       setError(
         err?.response?.data?.message ||
           err?.response?.data?.error ||
-          "Failed to load assigned tasks.",
+          "Failed to load assigned tickets.",
       );
     } finally {
       setLoading(false);
@@ -64,20 +64,20 @@ export default function MyTasks() {
   // ============================================================
 
   useEffect(() => {
-    loadTasks();
+    loadTickets();
   }, [view]);
 
   // ============================================================
   // OPEN TICKET DETAILS
   // ============================================================
 
-  const handleTaskClick = (taskId) => {
-    if (!taskId) {
+  const handleTicketClick = (ticketId) => {
+    if (!ticketId) {
       console.error("Ticket ID is missing.");
       return;
     }
 
-    navigate(`/member/developer/tickets/${encodeURIComponent(taskId)}`);
+    navigate(`/member/developer/tickets/${encodeURIComponent(ticketId)}`);
   };
 
   // ============================================================
@@ -130,7 +130,7 @@ export default function MyTasks() {
             }}
           >
             <AssignmentIcon />
-            My Tasks
+            My Tickets
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -141,7 +141,7 @@ export default function MyTasks() {
         <Button
           variant="outlined"
           startIcon={<RefreshIcon />}
-          onClick={loadTasks}
+          onClick={loadTickets}
         >
           Refresh
         </Button>
@@ -171,10 +171,10 @@ export default function MyTasks() {
       )}
 
       {/* ======================================================
-          NO TASKS
+          NO TICKETS
       ====================================================== */}
 
-      {!error && tasks.length === 0 && (
+      {!error && tickets.length === 0 && (
         <Paper
           elevation={0}
           sx={{
@@ -195,7 +195,7 @@ export default function MyTasks() {
 
           <Typography variant="h6" fontWeight={600}>
             {view === "active"
-              ? "No active tasks"
+              ? "No active tickets"
               : view === "resolved"
                 ? "No resolved tickets"
                 : "No tickets found"}
@@ -212,14 +212,14 @@ export default function MyTasks() {
       )}
 
       {/* ======================================================
-          TASK LIST
+          TICKET LIST
       ====================================================== */}
 
       {!error &&
-        tasks.map((task) => (
+        tickets.map((ticket) => (
           <Paper
-            key={task.id}
-            onClick={() => handleTaskClick(task.id)}
+            key={ticket.id}
+            onClick={() => handleTicketClick(ticket.id)}
             elevation={0}
             sx={{
               p: 2.5,
@@ -255,11 +255,11 @@ export default function MyTasks() {
                   color="text.secondary"
                   fontWeight={600}
                 >
-                  {task.code || `TICKET-${task.id}`}
+                  {ticket.code || `TICKET-${ticket.id}`}
                 </Typography>
 
                 <Typography variant="h6" fontWeight={700} sx={{ mt: 0.5 }}>
-                  {task.name || "Untitled Ticket"}
+                  {ticket.name || "Untitled Ticket"}
                 </Typography>
               </Box>
 
@@ -271,21 +271,21 @@ export default function MyTasks() {
             ================================================= */}
 
             <Typography variant="body2" sx={{ mt: 2 }}>
-              <strong>Project:</strong> {task.projectName || "-"}
+              <strong>Project:</strong> {ticket.projectName || "-"}
             </Typography>
 
-            {task.dueDate && (
+            {ticket.dueDate && (
               <Chip
                 size="small"
                 sx={{ mt: 1.5 }}
                 color={
-                  new Date(task.dueDate).getTime() < Date.now() &&
-                  task.statusCategory !== "DONE" &&
-                  task.statusCategory !== "CANCELLED"
+                  new Date(ticket.dueDate).getTime() < Date.now() &&
+                  ticket.statusCategory !== "DONE" &&
+                  ticket.statusCategory !== "CANCELLED"
                     ? "error"
                     : "default"
                 }
-                label={`Due: ${new Date(task.dueDate).toLocaleString()}`}
+                label={`Due: ${new Date(ticket.dueDate).toLocaleString()}`}
               />
             )}
 
@@ -294,7 +294,7 @@ export default function MyTasks() {
             ================================================= */}
 
             <Typography variant="body2" sx={{ mt: 0.5 }}>
-              <strong>Status:</strong> {task.statusName || "-"}
+              <strong>Status:</strong> {ticket.statusName || "-"}
             </Typography>
 
             {/* =================================================
@@ -302,7 +302,7 @@ export default function MyTasks() {
             ================================================= */}
 
             <Typography variant="body2" sx={{ mt: 0.5 }}>
-              <strong>Priority:</strong> {task.priorityName || "-"}
+              <strong>Priority:</strong> {ticket.priorityName || "-"}
             </Typography>
           </Paper>
         ))}

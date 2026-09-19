@@ -8,15 +8,15 @@
    mixes component and non-component exports can't be hot-reloaded
    as a component.
 --------------------------------------------------------- */
-export const INK = "#101223";
-export const SLATE = "#1C1F33";
-export const GOLD = "#C8A15A";
-export const GOLD_SOFT = "rgba(200,161,90,0.16)";
-export const PAPER = "#F7F6F2";
-export const CARD = "#FFFFFF";
-export const TEXT_INK = "#181A2E";
-export const TEXT_MUTED = "#71727F";
-export const HAIRLINE = "rgba(24,26,46,0.10)";
+export const INK = "var(--pm-ink)";
+export const SLATE = "var(--pm-ink)";
+export const GOLD = "var(--pm-primary)";
+export const GOLD_SOFT = "var(--pm-primary-soft)";
+export const PAPER = "var(--pm-page)";
+export const CARD = "var(--pm-surface-solid)";
+export const TEXT_INK = "var(--pm-ink)";
+export const TEXT_MUTED = "var(--pm-text-secondary)";
+export const HAIRLINE = "var(--pm-border)";
 export const DISPLAY_FONT = "'Fraunces', Georgia, serif";
 export const UI_FONT = "'Inter', 'Work Sans', system-ui, sans-serif";
 
@@ -70,13 +70,13 @@ export const AUTH_KEYFRAMES = `
 --------------------------------------------------------- */
 export const authFieldSx = {
   "& .MuiOutlinedInput-root": {
-    backgroundColor: "#FCFBF9",
+    backgroundColor: "var(--pm-surface-solid)",
     borderRadius: 1.5,
     fontFamily: UI_FONT,
     fontSize: "0.95rem",
     transition: "box-shadow 0.2s ease, border-color 0.2s ease",
     "& fieldset": { borderColor: HAIRLINE },
-    "&:hover fieldset": { borderColor: "rgba(24,26,46,0.22)" },
+    "&:hover fieldset": { borderColor: "var(--pm-border-hover)" },
     "&.Mui-focused fieldset": {
       borderColor: GOLD,
       borderWidth: 1,

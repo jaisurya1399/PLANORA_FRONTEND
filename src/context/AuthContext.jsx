@@ -177,7 +177,8 @@ export const AuthProvider = ({ children }) => {
 
   const getProjectRoleLabel = (projectId) => {
     const role = getProjectRole(projectId);
-    if (!role) return isSystemAdmin() ? "System Admin" : "No project role";
+    if (!role)
+      return isSystemAdmin() ? "System Administrator" : "No project role";
     return String(role)
       .replaceAll("_", " ")
       .toLowerCase()

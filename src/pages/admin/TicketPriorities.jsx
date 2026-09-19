@@ -30,6 +30,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import {
   createTicketPriority,
@@ -168,7 +169,7 @@ export default function TicketPriorities() {
   };
 
   const handleDelete = async (priority) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Are you sure you want to delete "${priority.name}"?`,
     );
 
@@ -253,7 +254,7 @@ export default function TicketPriorities() {
 
         <Box sx={{ display: "flex", gap: 1 }}>
           <Tooltip title="Refresh">
-            <IconButton onClick={loadPriorities}>
+            <IconButton onClick={loadPriorities} aria-label="Refresh">
               <Refresh />
             </IconButton>
           </Tooltip>
@@ -447,6 +448,7 @@ export default function TicketPriorities() {
                                   <IconButton
                                     color="primary"
                                     onClick={() => openEditDialog(priority)}
+                                    aria-label="Edit"
                                   >
                                     <Edit />
                                   </IconButton>
@@ -456,6 +458,7 @@ export default function TicketPriorities() {
                                   <IconButton
                                     color="error"
                                     onClick={() => handleDelete(priority)}
+                                    aria-label="Delete"
                                   >
                                     <Delete />
                                   </IconButton>
@@ -466,6 +469,7 @@ export default function TicketPriorities() {
                                 <IconButton
                                   color="success"
                                   onClick={() => handleRestore(priority)}
+                                  aria-label="Restore"
                                 >
                                   <Restore />
                                 </IconButton>

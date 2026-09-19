@@ -139,6 +139,7 @@ export default function Profile() {
                   bgcolor: "background.paper",
                   boxShadow: 2,
                 }}
+                aria-label="Change profile photo"
               >
                 <PhotoCameraIcon fontSize="small" />
               </IconButton>

@@ -20,7 +20,7 @@ export function ThemeModeProvider({ children }) {
   // the new colors — they simply re-run from scratch.
   const [version, setVersion] = useState(0);
 
-  const muiTheme = useMemo(() => buildTheme(), [version]);
+  const muiTheme = useMemo(() => buildTheme(paletteKey), [paletteKey, version]);
 
   const setPaletteKey = (key) => {
     if (!PALETTES[key] || key === paletteKey) return;

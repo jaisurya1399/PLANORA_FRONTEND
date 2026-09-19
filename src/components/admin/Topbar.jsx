@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import PlanoraLogo from "../../PlanoraLogo";
-import { BORDER, PRIMARY, TOPBAR } from "../../theme/colors";
+import { BORDER, PRIMARY, SURFACE_SUBTLE, TOPBAR } from "../../theme/colors";
 import MemberAvatar from "../common/MemberAvatar";
 
 export default function Topbar({ onMenuClick = () => {} }) {
@@ -91,7 +91,7 @@ export default function Topbar({ onMenuClick = () => {} }) {
         position="sticky"
         elevation={0}
         sx={{
-          bgcolor: "rgba(255,255,255,.78)",
+          bgcolor: TOPBAR.background,
           backdropFilter: "blur(14px)",
           boxShadow:
             "0 1px 0 rgba(16,24,40,.04), 0 14px 34px rgba(16,24,40,.045)",
@@ -125,7 +125,7 @@ export default function Topbar({ onMenuClick = () => {} }) {
           >
             <PlanoraLogo size={30} showText={false} />
           </Box>
-          <Box sx={{ display: { xs: "none", sm: "block" }, minWidth: 180 }}>
+          <Box sx={{ display: { xs: "none", lg: "block" }, minWidth: 150 }}>
             <Typography sx={{ fontSize: 14, fontWeight: 800 }}>
               Admin Workspace
             </Typography>
@@ -152,17 +152,18 @@ export default function Topbar({ onMenuClick = () => {} }) {
             }
             sx={{
               flex: 1,
+              minWidth: { xs: 0, sm: 220, md: 300 },
               maxWidth: 560,
               mx: { xs: 0, md: "auto" },
               justifyContent: "flex-start",
               textTransform: "none",
               color: "text.secondary",
-              bgcolor: "#F3F5FF",
+              bgcolor: SURFACE_SUBTLE,
               border: `1px solid ${BORDER}`,
               borderRadius: 2.5,
               minHeight: 40,
               px: 1.5,
-              "&:hover": { bgcolor: "#EAECFF", borderColor: "#BFC5F5" },
+              "&:hover": { bgcolor: SURFACE_SUBTLE, borderColor: BORDER },
             }}
           >
             Search projects, tickets, people...
@@ -260,7 +261,9 @@ export default function Topbar({ onMenuClick = () => {} }) {
             logout();
           }}
         >
-          <LogoutIcon sx={{ mr: 1.25, fontSize: 19 }} />
+          <LogoutIcon
+            sx={{ mr: 1.25, fontSize: 19, color: "text.secondary" }}
+          />
           Sign out
         </MenuItem>
       </Menu>

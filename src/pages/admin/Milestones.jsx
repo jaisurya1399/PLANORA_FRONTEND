@@ -40,6 +40,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 import { useAuth } from "../../context/AuthContext";
 
 import {
@@ -365,7 +366,7 @@ const Milestones = () => {
   };
 
   const handleDelete = async (milestone) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Delete milestone "${milestone.name}"? This cannot be undone.`,
     );
 
@@ -401,7 +402,7 @@ const Milestones = () => {
     if (!milestone || newStatus === milestone.status) return;
 
     if (newStatus === "COMPLETED") {
-      const confirmed = window.confirm(
+      const confirmed = await requestConfirm(
         `Mark milestone "${milestone.name}" as Completed?`,
       );
       if (!confirmed) return;
@@ -529,7 +530,7 @@ const Milestones = () => {
   };
 
   const handleRemoveTicket = async (milestone, ticket) => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       `Remove ${ticket.code || ticket.name} from "${milestone.name}"?`,
     );
 
@@ -687,6 +688,7 @@ const Milestones = () => {
                       size="small"
                       onClick={() => toggleExpand(milestone)}
                       sx={{ mt: 0.5 }}
+                      aria-label="Expand"
                     >
                       {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
@@ -805,7 +807,10 @@ const Milestones = () => {
 
                     <Stack direction="row">
                       <Tooltip title="Edit Milestone">
-                        <IconButton onClick={() => openEditDialog(milestone)}>
+                        <IconButton
+                          onClick={() => openEditDialog(milestone)}
+                          aria-label="Edit"
+                        >
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
@@ -814,6 +819,7 @@ const Milestones = () => {
                         <IconButton
                           color="error"
                           onClick={() => handleDelete(milestone)}
+                          aria-label="Delete"
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -926,6 +932,7 @@ const Milestones = () => {
                                     onClick={() =>
                                       handleRemoveTicket(milestone, ticket)
                                     }
+                                    aria-label="Close"
                                   >
                                     <CloseIcon fontSize="small" />
                                   </IconButton>

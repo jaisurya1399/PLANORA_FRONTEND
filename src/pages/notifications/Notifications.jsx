@@ -24,6 +24,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { requestConfirm } from "../../components/common/ConfirmDialogProvider";
 
 import {
   getNotificationPreferences,
@@ -245,7 +246,7 @@ export default function Notifications() {
   // ==========================================================
 
   const deleteAll = async () => {
-    const confirmed = window.confirm(
+    const confirmed = await requestConfirm(
       "Are you sure you want to delete all notifications?",
     );
 
@@ -304,7 +305,11 @@ export default function Notifications() {
             Preferences
           </Button>
           <Tooltip title="Refresh">
-            <IconButton onClick={loadNotifications} disabled={loading}>
+            <IconButton
+              onClick={loadNotifications}
+              disabled={loading}
+              aria-label="Refresh"
+            >
               <RefreshIcon />
             </IconButton>
           </Tooltip>
@@ -509,6 +514,7 @@ export default function Notifications() {
                         <IconButton
                           size="small"
                           onClick={() => markAsRead(notification.id)}
+                          aria-label="Mark as read"
                         >
                           <MarkEmailReadIcon />
                         </IconButton>
@@ -518,6 +524,7 @@ export default function Notifications() {
                         <IconButton
                           size="small"
                           onClick={() => markAsUnread(notification.id)}
+                          aria-label="Mark as unread"
                         >
                           <MarkEmailUnreadIcon />
                         </IconButton>
@@ -529,6 +536,7 @@ export default function Notifications() {
                         size="small"
                         color="error"
                         onClick={() => deleteNotification(notification.id)}
+                        aria-label="Delete"
                       >
                         <DeleteOutlineIcon />
                       </IconButton>

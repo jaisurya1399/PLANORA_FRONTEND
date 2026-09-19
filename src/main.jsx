@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import AppErrorBoundary from "./components/AppErrorBoundary";
+import { ConfirmDialogProvider } from "./components/common/ConfirmDialogProvider";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
 
@@ -16,9 +17,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <ThemeModeProvider>
         <AuthProvider>
           <ToastProvider>
-            <AppErrorBoundary>
-              <App />
-            </AppErrorBoundary>
+            <ConfirmDialogProvider>
+              <AppErrorBoundary>
+                <App />
+              </AppErrorBoundary>
+            </ConfirmDialogProvider>
           </ToastProvider>
         </AuthProvider>
       </ThemeModeProvider>

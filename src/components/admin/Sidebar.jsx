@@ -34,7 +34,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import PlanoraLogo from "../../PlanoraLogo";
-import { BORDER, MOTION, PRIORITY_COLORS, SIDEBAR } from "../../theme/colors";
+import { BORDER, MOTION, SIDEBAR } from "../../theme/colors";
 
 export const DRAWER_WIDTH = 252;
 
@@ -153,7 +153,7 @@ const SECTIONS = [
       //   "workflow.view",
       // ],
       [
-        "Issue Templates",
+        "Ticket Templates",
         "/admin/ticket-templates",
         TuneRoundedIcon,
         "ticket_template.view",
@@ -206,6 +206,7 @@ function Item({ item, active, onClose, navigate }) {
   return (
     <ListItemButton
       component="button"
+      selected={active}
       type="button"
       onClick={(event) => {
         onClose?.();
@@ -235,12 +236,12 @@ function Item({ item, active, onClose, navigate }) {
           bgcolor: active ? "rgba(99,102,241,.22)" : SIDEBAR.itemHoverBg,
           transform: "translateX(1px)",
         },
-        "&.active": {
+        "&.Mui-selected": {
           background: SIDEBAR.itemSelectedBg,
           color: "#FFFFFF",
           fontWeight: 700,
         },
-        "&.active::before": {
+        "&.Mui-selected::before": {
           content: '""',
           position: "absolute",
           left: 3,
@@ -429,7 +430,7 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
           if (originalPath === "/admin/projects/create") return false;
 
           // Sprint Analytics is a project-level analytics feature.
-          // It is available only to Project Admin and Team Lead.
+          // It is available only to Project Administrator and Team Lead.
           if (
             originalPath === "/admin/time-tracking" &&
             !["PROJECT_ADMIN", "TEAM_LEAD"].includes(activeProjectRole)
@@ -571,7 +572,7 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
               onClose();
             }}
             sx={{
-              color: "#f16868",
+              color: SIDEBAR.selectorText,
               backgroundColor: "#f8fafc",
               ".MuiOutlinedInput-notchedOutline": {
                 borderColor: "rgba(255,255,255,.16)",
@@ -594,7 +595,14 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
       <Box
         component="nav"
         aria-label="Admin navigation"
-        sx={{ flex: 1, overflowY: "auto", px: 1, py: 1.25 }}
+        sx={{
+          flex: 1,
+          overflowY: "auto",
+          overscrollBehavior: "contain",
+          scrollbarGutter: "stable",
+          px: 1,
+          py: 1.25,
+        }}
       >
         {visibleSections.map((section) => {
           const active = section.items.some(
@@ -673,8 +681,8 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
           sx={{
             minHeight: 42,
             borderRadius: 1.5,
-            color: PRIORITY_COLORS.HIGHEST,
-            "&:hover": { bgcolor: "rgba(239,68,68,.10)" },
+            color: SIDEBAR.itemText,
+            "&:hover": { bgcolor: SIDEBAR.itemHoverBg },
           }}
         >
           <Box sx={{ width: 28, display: "grid", placeItems: "center" }}>

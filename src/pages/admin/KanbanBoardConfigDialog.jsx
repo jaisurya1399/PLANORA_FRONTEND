@@ -202,12 +202,14 @@ export default function KanbanBoardConfigDialog({
                   <IconButton
                     onClick={() => move(index, -1)}
                     disabled={index === 0}
+                    aria-label="Move up"
                   >
                     <ArrowUpwardIcon />
                   </IconButton>
                   <IconButton
                     onClick={() => move(index, 1)}
                     disabled={index === rows.length - 1}
+                    aria-label="Move down"
                   >
                     <ArrowDownwardIcon />
                   </IconButton>

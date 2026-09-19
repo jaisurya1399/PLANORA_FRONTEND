@@ -553,7 +553,7 @@ function BoardHeader({
         {isDeveloper && (
           <Chip
             size="small"
-            label="Edit: assigned tasks only"
+            label="Edit: assigned tickets only"
             sx={{
               bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
               color: "primary.main",
@@ -1019,9 +1019,9 @@ export default function DeveloperBoard() {
                   size="small"
                   color="inherit"
                   endIcon={<ArrowForwardIcon />}
-                  onClick={() => navigate("/member/developer/tasks")}
+                  onClick={() => navigate("/member/developer/tickets")}
                 >
-                  My Tasks
+                  My Tickets
                 </Button>
               }
             >

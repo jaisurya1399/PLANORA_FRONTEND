@@ -26,7 +26,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import PlanoraLogo from "../../PlanoraLogo";
 import { MOTION, PRIORITY_COLORS, RADIUS, SIDEBAR } from "../../theme/colors";
@@ -44,8 +44,8 @@ const NAV_SECTIONS = [
         icon: FolderOutlined,
       },
       {
-        label: "My Tasks",
-        path: "/developer/tasks",
+        label: "My Tickets",
+        path: "/developer/tickets",
         icon: AssignmentOutlined,
       },
       {
@@ -141,6 +141,7 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
     hasActionPermission,
   } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const memberships = useMemo(
     () => (user?.projectMemberships || []).filter((m) => m?.projectId),
@@ -253,6 +254,7 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
         <IconButton
           onClick={onClose}
           sx={{ display: { xs: "flex", md: "none" }, color: "#94A3B8" }}
+          aria-label="Close"
         >
           <Close />
         </IconButton>
@@ -300,7 +302,7 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
               onClose();
             }}
             sx={{
-              color: "#f16868",
+              color: SIDEBAR.selectorText,
               backgroundColor: "#f8fafc",
               ".MuiOutlinedInput-notchedOutline": {
                 borderColor: "rgba(255,255,255,.16)",
@@ -321,7 +323,14 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
       <Box
         component="nav"
         aria-label="Project navigation"
-        sx={{ flex: 1, overflowY: "auto", px: 1.25, py: 1.5 }}
+        sx={{
+          flex: 1,
+          overflowY: "auto",
+          overscrollBehavior: "contain",
+          scrollbarGutter: "stable",
+          px: 1.25,
+          py: 1.5,
+        }}
       >
         {visibleSections.map((section) => (
           <Box key={section.title} sx={{ mb: 1.8 }}>
@@ -341,11 +350,18 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
             <List disablePadding>
               {section.items.map((item) => {
                 const Icon = item.icon;
+                const isActive =
+                  location.pathname === item.path ||
+                  (item.path !== "/developer" &&
+                    location.pathname.startsWith(`${item.path}/`));
+
                 return (
                   <ListItemButton
                     key={item.path}
+                    selected={isActive}
                     component="button"
                     type="button"
+                    aria-current={isActive ? "page" : undefined}
                     onClick={(event) => {
                       onClose?.();
                       // Internal project navigation must stay inside the SPA.
@@ -375,12 +391,15 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
                         color: "#94A3B8",
                       },
                       "&:hover": { bgcolor: SIDEBAR.itemHoverBg },
-                      "&.active": {
+                      "&.Mui-selected": {
                         color: SIDEBAR.itemSelectedText,
                         background: SIDEBAR.itemSelectedBg,
                         fontWeight: 650,
                       },
-                      "&.active .MuiListItemIcon-root": {
+                      "&.Mui-selected:hover": {
+                        background: SIDEBAR.itemSelectedBg,
+                      },
+                      "&.Mui-selected .MuiListItemIcon-root": {
                         color: SIDEBAR.itemSelectedText,
                       },
                     }}

@@ -255,7 +255,7 @@ export default function DailyScrum() {
         return;
       }
 
-      // Use the project-scoped endpoint so Project Admin/Team Lead can
+      // Use the project-scoped endpoint so Project Administrator/Team Lead can
       // retrieve scrum data for the selected project without calling the
       // user-self endpoint. Then show only the selected developer.
       const response = await getDailyScrumsByProjectAndRange(
@@ -621,7 +621,7 @@ export default function DailyScrum() {
               px: 2,
             }}
           >
-            Add Scrum
+            Create Daily Scrum
           </Button>
         </Stack>
       </Stack>
@@ -1129,7 +1129,7 @@ export default function DailyScrum() {
                     <td>
                       <Stack direction="row" spacing={0.5}>
                         {scrum ? (
-                          <Tooltip title="Edit Scrum">
+                          <Tooltip title="Edit Daily Scrum">
                             <IconButton
                               size="small"
                               onClick={() => handleEdit(scrum)}
@@ -1138,12 +1138,13 @@ export default function DailyScrum() {
                                 borderColor: "divider",
                                 borderRadius: 1.5,
                               }}
+                              aria-label="Edit"
                             >
                               <Edit fontSize="small" />
                             </IconButton>
                           </Tooltip>
                         ) : (
-                          <Tooltip title="Add Scrum">
+                          <Tooltip title="Create Daily Scrum">
                             <IconButton
                               size="small"
                               color="primary"
@@ -1153,6 +1154,7 @@ export default function DailyScrum() {
                                 borderColor: "primary.main",
                                 borderRadius: 1.5,
                               }}
+                              aria-label="Add"
                             >
                               <Add fontSize="small" />
                             </IconButton>
@@ -1208,7 +1210,11 @@ export default function DailyScrum() {
               </Typography>
             </Box>
 
-            <IconButton onClick={handleCloseDialog} disabled={saving}>
+            <IconButton
+              onClick={handleCloseDialog}
+              disabled={saving}
+              aria-label="Close"
+            >
               <Close />
             </IconButton>
           </Stack>
@@ -1268,7 +1274,7 @@ export default function DailyScrum() {
 
             <TextField
               type="date"
-              label="Scrum Date"
+              label="Daily Scrum Date"
               value={form.scrumDate}
               onChange={(e) =>
                 setForm((prev) => ({
